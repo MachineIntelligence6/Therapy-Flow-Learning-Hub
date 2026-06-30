@@ -45,8 +45,9 @@ export const ArticleDetailView: React.FC<ArticleDetailViewProps> = ({
 
   // Compute headings list dynamically from content headings
   const headingsList = React.useMemo(() => {
+    const list: { id: string; label: string; title: string }[] = [];
+    
     if (article?.content && Array.isArray(article.content)) {
-      const list: { id: string; label: string; title: string }[] = [];
       article.content.forEach((block, idx) => {
         if (block.type === 'heading') {
           const text = block.children?.map((c: any) => c.text || '').join('') || '';
@@ -59,9 +60,18 @@ export const ArticleDetailView: React.FC<ArticleDetailViewProps> = ({
           }
         }
       });
-      return list;
     }
-    return [];
+
+    // Default "Overview" heading to keep the premium sidebar layout active if no other headings exist
+    if (list.length === 0) {
+      list.push({
+        id: 'article-overview',
+        label: 'Overview',
+        title: article?.title || 'Overview'
+      });
+    }
+    
+    return list;
   }, [article]);
 
   useEffect(() => {
@@ -218,7 +228,7 @@ export const ArticleDetailView: React.FC<ArticleDetailViewProps> = ({
 
           {/* Display content panel */}
           <div className="tabs-content-panel">
-            <div className="detail-body rich-content-body">
+            <div className="detail-body rich-content-body" id="article-overview">
               <div className="section-body-blocks">
                 {renderStrapiBlocks(article?.content)}
               </div>
