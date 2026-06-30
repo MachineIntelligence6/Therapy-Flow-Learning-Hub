@@ -71,10 +71,14 @@ export const Header: React.FC<HeaderProps> = ({
               );
             })}
           </ul>
+          {/* Mobile-only CTA Button inside drawer */}
+          <button className="cta-button mobile-only-cta" onClick={() => { onBookTrialClick(); setMobileMenuOpen(false); }}>
+            Book your 7-Day Free trial
+          </button>
         </nav>
 
-        {/* CTA Button */}
-        <button className="cta-button" onClick={onBookTrialClick}>
+        {/* Desktop-only CTA Button */}
+        <button className="cta-button desktop-only-cta" onClick={onBookTrialClick}>
           Book your 7-Day Free trial
         </button>
       </div>

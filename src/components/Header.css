@@ -108,9 +108,9 @@
 .hamburger {
   display: none;
   flex-direction: column;
-  justify-content: space-around;
+  justify-content: space-between;
   width: 24px;
-  height: 20px;
+  height: 16px;
   background: transparent;
   border: none;
   cursor: pointer;
@@ -124,8 +124,28 @@
   background: var(--Neutral-950);
   border-radius: 10px;
   transition: all var(--transition-normal);
-  position: relative;
-  transform-origin: 1px;
+}
+
+/* Hamburger active transformation */
+.hamburger.active span:first-child {
+  transform: translateY(7px) rotate(45deg);
+}
+
+.hamburger.active span:nth-child(2) {
+  opacity: 0;
+}
+
+.hamburger.active span:last-child {
+  transform: translateY(-7px) rotate(-45deg);
+}
+
+/* CTA Visibility Helpers */
+.mobile-only-cta {
+  display: none;
+}
+
+.desktop-only-cta {
+  display: flex;
 }
 
 /* Mobile Responsiveness */
@@ -167,8 +187,13 @@
     text-align: left;
   }
 
-  .cta-button {
+  .mobile-only-cta {
+    display: flex;
     width: 100%;
     margin-top: auto;
+  }
+
+  .desktop-only-cta {
+    display: none;
   }
 }
