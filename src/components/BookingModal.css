@@ -1,0 +1,228 @@
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(27, 28, 32, 0.4);
+  backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 200;
+  animation: overlayFadeIn var(--transition-normal) forwards;
+}
+
+.modal-content {
+  background-color: var(--Neutral-25);
+  border-radius: var(--Numbers-md);
+  box-shadow: var(--shadow-premium);
+  position: relative;
+  max-width: 500px;
+  width: 90%;
+  padding: 40px;
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+.modal-close-btn {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  color: var(--Neutral-400);
+  background: none;
+  border: none;
+  cursor: pointer;
+  transition: color var(--transition-fast);
+}
+
+.modal-close-btn:hover {
+  color: var(--Neutral-950);
+}
+
+/* Booking form styling */
+.booking-header {
+  text-align: center;
+  margin-bottom: 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.icon-badge {
+  background-color: var(--bg-hero);
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 16px;
+}
+
+.sparkle-icon {
+  color: var(--primary-800-p);
+}
+
+.booking-title {
+  font-size: 24px;
+  font-weight: 800;
+  color: var(--Neutral-950);
+  margin-bottom: 8px;
+}
+
+.booking-description {
+  font-size: 14px;
+  line-height: 22px;
+  color: var(--Neutral-600);
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 16px;
+}
+
+.form-group label {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--Neutral-800);
+}
+
+.form-group input,
+.form-group select {
+  height: 44px;
+  padding: 0 12px;
+  border-radius: var(--Numbers-sm);
+  border: 1px solid var(--Neutral-300);
+  background-color: var(--Neutral-25);
+  font-size: 15px;
+  color: var(--Neutral-950);
+  outline: none;
+  transition: all var(--transition-fast);
+}
+
+.form-group input:focus,
+.form-group select:focus {
+  border-color: var(--primary-800-p);
+  box-shadow: 0 0 0 3px rgba(60, 77, 88, 0.15);
+}
+
+.form-checkbox {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  margin-bottom: 24px;
+}
+
+.form-checkbox input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  border-radius: 4px;
+  border: 1px solid var(--Neutral-300);
+  margin-top: 2px;
+  accent-color: var(--primary-800-p);
+  cursor: pointer;
+}
+
+.form-checkbox label {
+  font-size: 13px;
+  line-height: 18px;
+  color: var(--Neutral-600);
+  user-select: none;
+}
+
+.submit-btn {
+  width: 100%;
+  height: 48px;
+  background-color: var(--primary-800-p);
+  color: var(--Neutral-25);
+  border-radius: var(--Numbers-sm);
+  font-size: 16px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: var(--shadow-sm);
+  transition: all var(--transition-fast);
+}
+
+.submit-btn:hover {
+  background-color: var(--primary-700-p);
+  box-shadow: var(--shadow-md);
+}
+
+.submit-btn:disabled {
+  background-color: var(--Neutral-300);
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+/* Spinner */
+.spinner {
+  width: 20px;
+  height: 20px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  border-top-color: white;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* Success View */
+.booking-success {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 16px 0;
+}
+
+.success-icon {
+  color: #10B981;
+  margin-bottom: 20px;
+  animation: scaleIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+}
+
+.success-title {
+  font-size: 26px;
+  font-weight: 800;
+  color: var(--Neutral-950);
+  margin-bottom: 12px;
+}
+
+.success-description {
+  font-size: 15px;
+  line-height: 24px;
+  color: var(--Neutral-600);
+  margin-bottom: 28px;
+}
+
+.success-close-btn {
+  background-color: var(--primary-800-p);
+  color: var(--Neutral-25);
+  padding: var(--Numbers-base) var(--Numbers-lg);
+  border-radius: var(--Numbers-sm);
+  font-size: 15px;
+  font-weight: 600;
+  transition: all var(--transition-fast);
+}
+
+.success-close-btn:hover {
+  background-color: var(--primary-700-p);
+}
+
+@keyframes scaleIn {
+  from { transform: scale(0.6); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+/* Modal fade animation helper */
+@keyframes overlayFadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}

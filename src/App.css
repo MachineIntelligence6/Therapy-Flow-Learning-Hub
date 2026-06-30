@@ -1,0 +1,419 @@
+.app-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.flex-grow {
+  flex-grow: 1;
+}
+
+/* Search and Filter Section */
+.search-filter-section {
+  padding: 32px 0;
+  border-bottom: 1px solid var(--border-color);
+  background-color: var(--Neutral-25);
+}
+
+.search-box-wrapper {
+  position: relative;
+  max-width: 640px;
+  width: 100%;
+  margin: 0 auto 24px auto;
+  display: flex;
+  align-items: center;
+}
+
+.search-icon {
+  position: absolute;
+  left: 16px;
+  color: var(--Neutral-400);
+}
+
+.search-input {
+  width: 100%;
+  height: 48px;
+  padding: 0 80px 0 48px;
+  border-radius: 100px;
+  border: 1px solid var(--Neutral-300);
+  font-size: 15px;
+  color: var(--Neutral-950);
+  background-color: var(--Neutral-50);
+  outline: none;
+  transition: all var(--transition-fast);
+}
+
+.search-input:focus {
+  background-color: var(--Neutral-25);
+  border-color: var(--primary-800-p);
+  box-shadow: 0 0 0 3px rgba(60, 77, 88, 0.15);
+}
+
+.clear-search-btn {
+  position: absolute;
+  right: 16px;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--Neutral-500);
+  border: none;
+  background: none;
+  cursor: pointer;
+}
+
+.clear-search-btn:hover {
+  color: var(--Neutral-950);
+}
+
+/* Category pills */
+.category-pills-bar {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.category-pill-btn {
+  padding: 8px 16px;
+  border-radius: 100px;
+  border: 1px solid var(--Neutral-200);
+  background-color: var(--Neutral-25);
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--Neutral-600);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.category-pill-btn:hover {
+  border-color: var(--Neutral-400);
+  color: var(--Neutral-950);
+}
+
+.category-pill-btn.pill-active {
+  background-color: var(--primary-800-p);
+  border-color: var(--primary-800-p);
+  color: var(--Neutral-25);
+  box-shadow: var(--shadow-sm);
+}
+
+/* Hero & Featured Card Gradient Container */
+.hero-featured-gradient-wrapper {
+  background: linear-gradient(180deg, rgba(90, 165, 197, 0.2) 0%, rgba(255, 255, 255, 0) 100%);
+  padding-bottom: 64px;
+}
+
+.featured-section-wrapper {
+  margin-top: 40px; /* 40px gap between description and featured card */
+}
+
+/* Main content */
+.main-content {
+  padding: 48px 0 56px 0;
+  background-color: var(--Neutral-25); /* White background for bottom grid */
+}
+
+.articles-layout {
+  display: flex;
+  flex-direction: column;
+  gap: 56px;
+}
+
+.section-title-label {
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  color: var(--Neutral-500);
+  margin-bottom: 20px;
+  font-weight: 700;
+}
+
+.articles-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr); /* 4 columns per row matching Figma screenshot */
+  gap: 32px;
+}
+
+/* Pagination Widget Styles */
+.pagination-container-box {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  margin-top: 56px;
+}
+
+.pagination-wrapper {
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 424px; /* Fixed Figma width */
+  height: 60px; /* Fixed Figma height */
+  padding: 14px 16px; /* Figma padding: 14px top/bottom, 16px left/right */
+  border-radius: 20px; /* Figma border-radius */
+  border: 1px solid var(--Neutral-200); /* #EDEEF1 in Figma */
+  background-color: var(--Neutral-25); /* White background */
+  box-shadow: var(--shadow-sm);
+}
+
+.pagination-numbers {
+  display: flex;
+  align-items: center;
+  gap: 24px; /* Figma gap: 24px spacing between numbers list */
+}
+
+.pagination-arrow {
+  width: 32px;
+  height: 32px;
+  border-radius: 16px; /* Perfect circle */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--Neutral-100); /* #EDEEF1 in Figma */
+  border: none;
+  cursor: pointer;
+  color: var(--Neutral-950); /* #1B1C20 stroke color */
+  transition: all var(--transition-fast);
+  padding: 0;
+}
+
+.pagination-arrow:hover:not(:disabled) {
+  background-color: var(--Neutral-200);
+}
+
+.pagination-arrow:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+.pagination-number-btn {
+  background: none;
+  border: none;
+  padding: 0;
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--Neutral-600);
+  cursor: pointer;
+  width: 32px;
+  height: 32px;
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all var(--transition-fast);
+}
+
+.pagination-number-btn:hover:not(.active) {
+  color: var(--Neutral-950);
+  background-color: var(--Neutral-50);
+}
+
+.pagination-number-btn.active {
+  background-color: #517889; /* Figma Primary-500: #517889 */
+  color: var(--Neutral-25); /* White */
+}
+
+.pagination-dots-span {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--Neutral-400);
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Loader, error and empty states */
+.loader-container,
+.error-container,
+.empty-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 64px 0;
+}
+
+.loader-container {
+  gap: 16px;
+  color: var(--Neutral-600);
+}
+
+.spinner-icon {
+  animation: spin 1s linear infinite;
+  color: var(--primary-800-p);
+}
+
+.error-icon {
+  color: #DC2626;
+  margin-bottom: 16px;
+}
+
+.error-container h3,
+.empty-container h3 {
+  font-size: 22px;
+  font-weight: 800;
+  color: var(--Neutral-950);
+  margin-bottom: 8px;
+}
+
+.error-container p,
+.empty-container p {
+  font-size: 15px;
+  color: var(--Neutral-600);
+  max-width: 420px;
+  margin-bottom: 24px;
+}
+
+.retry-btn,
+.clear-filters-btn {
+  background-color: var(--primary-800-p);
+  color: white;
+  padding: 10px 20px;
+  border-radius: var(--Numbers-sm);
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.retry-btn:hover,
+.clear-filters-btn:hover {
+  background-color: var(--primary-700-p);
+}
+
+/* Footer styling matching Figma Screenshot */
+.site-footer {
+  background-color: var(--Neutral-25); /* White background */
+  border-top: 1px solid var(--Neutral-200); /* Thin border top */
+  color: var(--Neutral-600);
+  padding: 48px 0 32px 0;
+  font-size: 14px;
+  margin-top: 54px; /* Exact Figma margin top from pagination */
+}
+
+.footer-content {
+  display: flex;
+  flex-direction: column;
+}
+
+.footer-top-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  padding-bottom: 24px;
+}
+
+.footer-logo {
+  display: flex;
+  align-items: center;
+}
+
+.footer-links-row {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+}
+
+.footer-links-row a {
+  color: var(--Neutral-600);
+  font-weight: 500;
+  transition: color var(--transition-fast);
+}
+
+.footer-links-row a:hover {
+  color: var(--Neutral-950);
+}
+
+.footer-social-row {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.footer-social-row a {
+  color: var(--Neutral-600);
+  transition: color var(--transition-fast);
+}
+
+.footer-social-row a:hover {
+  color: var(--Neutral-950);
+}
+
+.footer-divider {
+  border: none;
+  border-top: 1px solid var(--Neutral-200);
+  margin: 0 0 24px 0;
+  width: 100%;
+}
+
+.footer-bottom-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+}
+
+.footer-bottom-row .copyright {
+  font-size: 14px;
+  color: var(--Neutral-500);
+}
+
+.footer-bottom-links {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+}
+
+.footer-bottom-links a {
+  color: var(--Neutral-500);
+  transition: color var(--transition-fast);
+}
+
+.footer-bottom-links a:hover {
+  color: var(--Neutral-950);
+}
+
+/* Responsiveness overrides */
+@media (max-width: 1100px) {
+  .articles-grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+  }
+}
+
+@media (max-width: 900px) {
+  .articles-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+  }
+
+  .conversion-container {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .conversion-btn {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+@media (max-width: 600px) {
+  .articles-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .conversion-text-block h2 {
+    font-size: 28px;
+    line-height: 36px;
+  }
+
+  .footer-container {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .footer-links {
+    margin-top: 8px;
+  }
+}

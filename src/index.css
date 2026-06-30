@@ -1,0 +1,194 @@
+@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap');
+
+:root {
+  /* Colors from Figma screenshots */
+  --primary-800-p: #3C4D58;
+  /* Main Dark Slate Blue */
+  --primary-700-p: #4E606C;
+  --primary-900-p: #2B3840;
+  --primary-50-p: #F0F4F6;
+
+  --Neutral-950: #1B1C20;
+  /* Deep Charcoal for menu and headers */
+  --Neutral-900: #25262B;
+  --Neutral-800: #3D3E45;
+  --Neutral-700: #555761;
+  --Neutral-600: #6D707D;
+  --Neutral-500: #888B9A;
+  --Neutral-400: #A4A7B7;
+  --Neutral-300: #C2C5D5;
+  --Neutral-200: #E1E3ED;
+  --Neutral-100: #EFF1F6;
+  --Neutral-50: #F8F9FB;
+  --Neutral-25: #FFFFFF;
+  /* High contrast white */
+
+  /* Semantic Mappings */
+  --bg-main: var(--Neutral-25);
+  --bg-hero: #E6F4FA;
+  /* The soft light blue background */
+  --bg-card: var(--Neutral-25);
+  --bg-hover: var(--Neutral-100);
+  --text-main: var(--Neutral-950);
+  --text-muted: var(--Neutral-600);
+  --text-white: var(--Neutral-25);
+  --border-color: var(--Neutral-200);
+
+  /* Spacing System */
+  --Numbers-sm: 8px;
+  --Numbers-base: 12px;
+  --Numbers-md: 16px;
+  --Numbers-lg: 24px;
+  --Numbers-xl: 32px;
+  --Numbers-xxl: 48px;
+
+  /* Typography */
+  --font-sans: 'Manrope', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+
+  /* Elevations & Shadows */
+  --shadow-sm: 0 1px 3px rgba(27, 28, 32, 0.05);
+  --shadow-md: 0 8px 16px -4px rgba(27, 28, 32, 0.06), 0 2px 4px -2px rgba(27, 28, 32, 0.04);
+  --shadow-lg: 0 20px 24px -4px rgba(27, 28, 32, 0.08), 0 8px 8px -4px rgba(27, 28, 32, 0.03);
+  --shadow-premium: 0 24px 48px -12px rgba(27, 28, 32, 0.12);
+
+  /* Transitions */
+  --transition-fast: 0.15s ease;
+  --transition-normal: 0.25s ease;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html,
+body {
+  width: 100%;
+  overflow-x: hidden;
+}
+
+body {
+  font-family: var(--font-sans);
+  color: var(--text-main);
+  background-color: var(--bg-main);
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+  transition: var(--transition-fast);
+}
+
+button {
+  font-family: var(--font-sans);
+  cursor: pointer;
+  border: none;
+  background: none;
+  transition: var(--transition-fast);
+}
+
+input,
+textarea,
+select {
+  font-family: var(--font-sans);
+}
+
+#root {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.container {
+  width: 100%;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 var(--Numbers-lg);
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--Neutral-50);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--Neutral-300);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--Neutral-400);
+}
+
+/* Micro-interaction Utilities */
+.hover-lift {
+  transition: transform var(--transition-normal), box-shadow var(--transition-normal);
+}
+
+.hover-lift:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-lg);
+}
+
+.btn-primary {
+  background-color: var(--primary-800-p);
+  color: var(--text-white);
+  padding: var(--Numbers-base) calc(var(--Numbers-base) * 2);
+  border-radius: var(--Numbers-sm);
+  font-size: 16px;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  box-shadow: var(--shadow-sm);
+}
+
+.btn-primary:hover {
+  background-color: var(--primary-700-p);
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-md);
+}
+
+.btn-primary:active {
+  background-color: var(--primary-900-p);
+  transform: translateY(0);
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes modalFade {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -48%) scale(0.96);
+  }
+
+  to {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+}
+
+.animate-fade-in {
+  animation: fadeIn var(--transition-normal) forwards;
+}

@@ -1,0 +1,351 @@
+.strapi-dev-panel {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  background-color: var(--Neutral-25);
+  border: 1px solid var(--border-color);
+  border-radius: var(--Numbers-md);
+  box-shadow: var(--shadow-lg);
+  z-index: 1000;
+  overflow: hidden;
+  transition: all var(--transition-normal) cubic-bezier(0.165, 0.84, 0.44, 1);
+  font-family: var(--font-sans);
+}
+
+.panel-collapsed {
+  width: 280px;
+}
+
+.panel-expanded {
+  width: 440px;
+  max-height: 520px;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Header button styling */
+.panel-header-btn {
+  width: 100%;
+  padding: 16px var(--Numbers-lg);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: var(--Neutral-950);
+  color: var(--Neutral-25);
+  border: none;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.panel-header-btn:hover {
+  background: var(--Neutral-900);
+}
+
+.btn-title-area {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.spin-icon {
+  animation: spin 6s linear infinite;
+}
+
+.status-pill {
+  font-size: 11px;
+  padding: 2px 8px;
+  border-radius: 100px;
+  font-weight: 600;
+}
+
+.status-active {
+  background-color: #10B981;
+  color: white;
+}
+
+.status-mock {
+  background-color: var(--Neutral-600);
+  color: white;
+}
+
+/* Expanded body */
+.panel-content-body {
+  padding: var(--Numbers-lg);
+  overflow-y: auto;
+  flex: 1;
+  max-height: 440px;
+  background-color: var(--Neutral-25);
+  border-top: 1px solid var(--Neutral-900);
+}
+
+/* Tab button headers */
+.panel-tabs {
+  display: flex;
+  border-bottom: 1px solid var(--border-color);
+  margin-bottom: 16px;
+  gap: 8px;
+}
+
+.panel-tab-btn {
+  flex: 1;
+  padding: 8px 4px;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--Neutral-500);
+  background: none;
+  border: none;
+  border-bottom: 2px solid transparent;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.panel-tab-btn:hover {
+  color: var(--Neutral-800);
+}
+
+.panel-tab-btn.tab-active {
+  color: var(--primary-800-p);
+  border-bottom-color: var(--primary-800-p);
+}
+
+/* Form group styles */
+.panel-form-group {
+  margin-bottom: var(--Numbers-md);
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.panel-form-group label {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--Neutral-800);
+}
+
+.panel-form-group input[type="text"] {
+  height: 38px;
+  padding: 0 12px;
+  border-radius: var(--Numbers-sm);
+  border: 1px solid var(--Neutral-300);
+  font-size: 14px;
+  color: var(--Neutral-950);
+  outline: none;
+}
+
+.panel-form-group input[type="text"]:focus {
+  border-color: var(--primary-800-p);
+}
+
+.field-hint {
+  font-size: 11px;
+  line-height: 16px;
+  color: var(--Neutral-500);
+  margin-top: 4px;
+}
+
+/* Checkbox alignment */
+.checkbox-group {
+  margin-bottom: 16px;
+}
+
+.checkbox-container {
+  display: flex;
+  align-items: center;
+  position: relative;
+  padding-left: 28px;
+  cursor: pointer;
+  font-size: 14px !important;
+  font-weight: 700;
+  color: var(--Neutral-950) !important;
+  user-select: none;
+}
+
+.checkbox-container input {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+  height: 0;
+  width: 0;
+}
+
+.checkbox-checkmark {
+  position: absolute;
+  top: 1px;
+  left: 0;
+  height: 18px;
+  width: 18px;
+  background-color: var(--Neutral-100);
+  border: 1px solid var(--Neutral-300);
+  border-radius: 4px;
+  transition: all var(--transition-fast);
+}
+
+.checkbox-container:hover input ~ .checkbox-checkmark {
+  background-color: var(--Neutral-200);
+}
+
+.checkbox-container input:checked ~ .checkbox-checkmark {
+  background-color: var(--primary-800-p);
+  border-color: var(--primary-800-p);
+}
+
+.checkbox-checkmark:after {
+  content: "";
+  position: absolute;
+  display: none;
+}
+
+.checkbox-container input:checked ~ .checkbox-checkmark:after {
+  display: block;
+}
+
+.checkbox-container .checkbox-checkmark:after {
+  left: 6px;
+  top: 2px;
+  width: 4px;
+  height: 8px;
+  border: solid white;
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+}
+
+/* Actions */
+.connection-actions {
+  display: flex;
+  gap: var(--Numbers-sm);
+  margin-top: 20px;
+}
+
+.btn-secondary {
+  flex: 1;
+  height: 38px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  border: 1px solid var(--Neutral-300);
+  color: var(--Neutral-800);
+  font-size: 13px;
+  font-weight: 600;
+  border-radius: var(--Numbers-sm);
+  cursor: pointer;
+}
+
+.btn-secondary:hover {
+  background-color: var(--Neutral-50);
+  border-color: var(--Neutral-400);
+}
+
+.btn-panel-save {
+  flex: 1;
+  height: 38px;
+  background-color: var(--primary-800-p);
+  color: var(--Neutral-25);
+  font-size: 13px;
+  font-weight: 600;
+  border-radius: var(--Numbers-sm);
+  cursor: pointer;
+}
+
+.btn-panel-save:hover {
+  background-color: var(--primary-700-p);
+}
+
+/* Alerts */
+.test-alert {
+  margin-top: 12px;
+  padding: 10px 12px;
+  border-radius: var(--Numbers-sm);
+  font-size: 12px;
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  line-height: 16px;
+}
+
+.alert-success {
+  background-color: #E8F8F0;
+  color: #065F46;
+  border: 1px solid #A7F3D0;
+}
+
+.alert-danger {
+  background-color: #FEF2F2;
+  color: #991B1B;
+  border: 1px solid #FEE2E2;
+}
+
+.spin-loading {
+  animation: spin 1s linear infinite;
+}
+
+/* Schema Tab design */
+.schema-intro {
+  font-size: 12px;
+  line-height: 18px;
+  color: var(--Neutral-600);
+  margin-bottom: 12px;
+}
+
+.schema-section {
+  background-color: var(--Neutral-50);
+  border: 1px solid var(--border-color);
+  border-radius: var(--Numbers-sm);
+  padding: 12px;
+  margin-bottom: 10px;
+}
+
+.schema-heading {
+  font-size: 13px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--Neutral-950);
+  margin-bottom: 6px;
+}
+
+.schema-list {
+  list-style: none;
+  padding-left: 18px;
+  font-size: 12px;
+  color: var(--Neutral-700);
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.schema-list li code {
+  color: #B45309;
+  background-color: #FEF3C7;
+  padding: 1px 4px;
+  border-radius: 3px;
+  font-family: monospace;
+}
+
+.schema-roles-box {
+  margin-top: 16px;
+  background-color: #F0F9FF;
+  border: 1px solid #BAE6FD;
+  padding: 12px;
+  border-radius: var(--Numbers-sm);
+  font-size: 11px;
+  line-height: 16px;
+  color: #0369A1;
+}
+
+.schema-roles-box strong {
+  display: block;
+  margin-bottom: 4px;
+  font-size: 12px;
+}
+
+/* Responsiveness */
+@media (max-width: 500px) {
+  .strapi-dev-panel {
+    left: 16px;
+    right: 16px;
+    bottom: 16px;
+    width: auto !important;
+  }
+}
