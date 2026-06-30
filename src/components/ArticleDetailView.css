@@ -1,5 +1,5 @@
 .article-detail-container {
-  max-width: 1400px;
+  max-width: 1200px;
   width: 100%;
   padding: 0 var(--Numbers-lg);
   display: flex;
@@ -152,6 +152,27 @@
 .tabs-content-panel {
   width: 72%;
   min-height: 250px;
+  max-height: calc(100vh - 240px);
+  overflow-y: auto;
+  padding-right: 16px;
+}
+
+/* Custom premium scrollbar for content panel */
+.tabs-content-panel::-webkit-scrollbar {
+  width: 6px;
+}
+
+.tabs-content-panel::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.tabs-content-panel::-webkit-scrollbar-thumb {
+  background-color: var(--Neutral-200, #E2E8F0);
+  border-radius: 20px;
+}
+
+.tabs-content-panel::-webkit-scrollbar-thumb:hover {
+  background-color: var(--Neutral-400, #94A3B8);
 }
 
 .section-heading-title {

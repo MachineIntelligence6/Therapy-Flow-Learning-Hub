@@ -15,33 +15,39 @@ const MOCK_ARTICLES: Article[] = [
     readTime: '5 min read',
     image: blogImage,
     breadcrumb: 'Home / Therapy Flow Learning Hub',
-    content: [
+    sections: [
       {
-        type: 'heading',
-        level: 2,
-        children: [{ type: 'text', text: '1. Setting Up Your Practitioner Profile' }]
+        id: 101,
+        tabLabel: 'Practitioner Profile',
+        title: '1. Setting Up Your Practitioner Profile',
+        description: [
+          {
+            type: 'paragraph',
+            children: [{ type: 'text', text: 'Before inviting clients, ensure your profile is fully complete. Go to Settings > Profile to add your bio, profile picture, certification details, and office address. A complete profile helps clients feel safe and build trust before their first session.' }]
+          }
+        ]
       },
       {
-        type: 'paragraph',
-        children: [{ type: 'text', text: 'Before inviting clients, ensure your profile is fully complete. Go to Settings > Profile to add your bio, profile picture, certification details, and office address. A complete profile helps clients feel safe and build trust before their first session.' }]
+        id: 102,
+        tabLabel: 'Availability',
+        title: '2. Configuring Availability & Scheduling',
+        description: [
+          {
+            type: 'paragraph',
+            children: [{ type: 'text', text: 'Navigate to the Calendar tab to configure your weekly slots. You can set recurring hours, buffer times between sessions, and maximum appointments per day. We integrate directly with Google and Outlook calendars, meaning you will never be double-booked.' }]
+          }
+        ]
       },
       {
-        type: 'heading',
-        level: 2,
-        children: [{ type: 'text', text: '2. Configuring Availability & Scheduling' }]
-      },
-      {
-        type: 'paragraph',
-        children: [{ type: 'text', text: 'Navigate to the Calendar tab to configure your weekly slots. You can set recurring hours, buffer times between sessions, and maximum appointments per day. We integrate directly with Google and Outlook calendars, meaning you will never be double-booked.' }]
-      },
-      {
-        type: 'heading',
-        level: 2,
-        children: [{ type: 'text', text: '3. Client Intake Forms & Onboarding' }]
-      },
-      {
-        type: 'paragraph',
-        children: [{ type: 'text', text: 'With our automated workflows, you can request digital signatures on HIPAA-compliant intake forms as soon as a client schedules their initial assessment. Choose from our standard template library or design custom questionnaires to capture symptoms, histories, and insurance details upfront.' }]
+        id: 103,
+        tabLabel: 'Client Intake',
+        title: '3. Client Intake Forms & Onboarding',
+        description: [
+          {
+            type: 'paragraph',
+            children: [{ type: 'text', text: 'With our automated workflows, you can request digital signatures on HIPAA-compliant intake forms as soon as a client schedules their initial assessment. Choose from our standard template library or design custom questionnaires to capture symptoms, histories, and insurance details upfront.' }]
+          }
+        ]
       }
     ]
   },
@@ -54,7 +60,7 @@ const MOCK_ARTICLES: Article[] = [
     category: 'Patient Portal',
     readTime: '4 min read',
     image: blogImage,
-
+    sections: []
   },
   {
     id: 3,
@@ -65,7 +71,7 @@ const MOCK_ARTICLES: Article[] = [
     category: 'Dashboard',
     readTime: '6 min read',
     image: blogImage,
-
+    sections: []
   },
   {
     id: 4,
@@ -76,7 +82,7 @@ const MOCK_ARTICLES: Article[] = [
     category: 'Scheduling',
     readTime: '5 min read',
     image: blogImage,
-
+    sections: []
   },
   {
     id: 5,
@@ -87,7 +93,7 @@ const MOCK_ARTICLES: Article[] = [
     category: 'Billing',
     readTime: '8 min read',
     image: blogImage,
-
+    sections: []
   },
   {
     id: 6,
@@ -98,7 +104,7 @@ const MOCK_ARTICLES: Article[] = [
     category: 'Clinical',
     readTime: '7 min read',
     image: blogImage,
-
+    sections: []
   },
   {
     id: 7,
@@ -109,7 +115,7 @@ const MOCK_ARTICLES: Article[] = [
     category: 'Access',
     readTime: '5 min read',
     image: blogImage,
-
+    sections: []
   },
   {
     id: 8,
@@ -120,7 +126,7 @@ const MOCK_ARTICLES: Article[] = [
     category: 'Security',
     readTime: '9 min read',
     image: blogImage,
-
+    sections: []
   },
   {
     id: 9,
@@ -131,7 +137,7 @@ const MOCK_ARTICLES: Article[] = [
     category: 'Settings',
     readTime: '6 min read',
     image: blogImage,
-
+    sections: []
   },
   {
     id: 10,
@@ -142,7 +148,7 @@ const MOCK_ARTICLES: Article[] = [
     category: 'Patient Portal',
     readTime: '4 min read',
     image: blogImage,
-
+    sections: []
   },
   {
     id: 11,
@@ -153,7 +159,7 @@ const MOCK_ARTICLES: Article[] = [
     category: 'Clinical',
     readTime: '7 min read',
     image: blogImage,
-
+    sections: []
   },
   {
     id: 12,
@@ -164,7 +170,7 @@ const MOCK_ARTICLES: Article[] = [
     category: 'Scheduling',
     readTime: '5 min read',
     image: blogImage,
-
+    sections: []
   },
   {
     id: 13,
@@ -175,7 +181,7 @@ const MOCK_ARTICLES: Article[] = [
     category: 'Billing',
     readTime: '8 min read',
     image: blogImage,
-
+    sections: []
   },
   {
     id: 14,
@@ -186,7 +192,7 @@ const MOCK_ARTICLES: Article[] = [
     category: 'Clinical',
     readTime: '6 min read',
     image: blogImage,
-
+    sections: []
   },
   {
     id: 15,
@@ -197,7 +203,7 @@ const MOCK_ARTICLES: Article[] = [
     category: 'Access',
     readTime: '5 min read',
     image: blogImage,
-
+    sections: []
   },
   {
     id: 16,
@@ -208,7 +214,7 @@ const MOCK_ARTICLES: Article[] = [
     category: 'Security',
     readTime: '9 min read',
     image: blogImage,
-
+    sections: []
   },
   {
     id: 17,
@@ -219,7 +225,7 @@ const MOCK_ARTICLES: Article[] = [
     category: 'Settings',
     readTime: '6 min read',
     image: blogImage,
-
+    sections: []
   },
   {
     id: 18,
@@ -230,7 +236,7 @@ const MOCK_ARTICLES: Article[] = [
     category: 'Patient Portal',
     readTime: '4 min read',
     image: blogImage,
-
+    sections: []
   },
   {
     id: 19,
@@ -241,7 +247,7 @@ const MOCK_ARTICLES: Article[] = [
     category: 'Patient Portal',
     readTime: '7 min read',
     image: blogImage,
-
+    sections: []
   },
   {
     id: 20,
@@ -252,7 +258,7 @@ const MOCK_ARTICLES: Article[] = [
     category: 'Clinical',
     readTime: '5 min read',
     image: blogImage,
-
+    sections: []
   },
   {
     id: 21,
@@ -263,7 +269,7 @@ const MOCK_ARTICLES: Article[] = [
     category: 'Billing',
     readTime: '8 min read',
     image: blogImage,
-
+    sections: []
   },
   {
     id: 22,
@@ -274,7 +280,7 @@ const MOCK_ARTICLES: Article[] = [
     category: 'Clinical',
     readTime: '6 min read',
     image: blogImage,
-
+    sections: []
   },
   {
     id: 23,
@@ -285,7 +291,7 @@ const MOCK_ARTICLES: Article[] = [
     category: 'Security',
     readTime: '5 min read',
     image: blogImage,
-
+    sections: []
   },
   {
     id: 24,
@@ -296,7 +302,7 @@ const MOCK_ARTICLES: Article[] = [
     category: 'Settings',
     readTime: '9 min read',
     image: blogImage,
-
+    sections: []
   },
   {
     id: 25,
@@ -307,7 +313,7 @@ const MOCK_ARTICLES: Article[] = [
     category: 'Settings',
     readTime: '6 min read',
     image: blogImage,
-
+    sections: []
   }
 ];
 
@@ -400,6 +406,7 @@ const mapStrapiEntryToArticle = (item: any, config: StrapiConfig): Article => {
   // 2. Reading time parsing (fallback to auto-calculated if blank/zero)
   let readTime = '5 min read';
   const content = attrs.Content || attrs.content || null;
+  const rawSections = attrs.Sections || attrs.sections || undefined;
   
   const readingTimeValue = attrs.Reading_Time !== undefined && attrs.Reading_Time !== null ? attrs.Reading_Time : 
                            attrs.reading_time !== undefined && attrs.reading_time !== null ? attrs.reading_time :
@@ -409,11 +416,34 @@ const mapStrapiEntryToArticle = (item: any, config: StrapiConfig): Article => {
   if (readingTimeValue !== undefined && readingTimeValue !== null && readingTimeValue !== 0) {
     readTime = `${readingTimeValue} min read`;
   } else {
-    readTime = calculateReadingTime(content, undefined);
+    readTime = calculateReadingTime(content, rawSections);
   }
 
   // 3. Date parsing
   const publishedAt = attrs.Publish_Date || attrs.publishedAt || new Date().toISOString();
+
+  // 5. Sections dynamic zone parsing for backward compatibility
+  const sections = rawSections ? rawSections.map((sec: any) => {
+    let blogFileUrl = '';
+    const blogFile = sec.blogFile || sec.blog_file;
+    if (blogFile) {
+      const fileMedia = blogFile.data ? blogFile.data : blogFile;
+      if (fileMedia && (fileMedia.attributes || fileMedia.url)) {
+        const fileAttrs = fileMedia.attributes ? fileMedia.attributes : fileMedia;
+        const url = fileAttrs.url;
+        if (url) {
+          blogFileUrl = url.startsWith('/') ? `${config.apiUrl}${url}` : url;
+        }
+      }
+    }
+    return {
+      id: sec.id,
+      tabLabel: sec.tabLabel || sec.tab_label || sec.title || 'Section',
+      title: sec.title || '',
+      description: sec.description || [],
+      blogFileUrl
+    };
+  }) : [];
 
   return {
     id,
@@ -426,7 +456,8 @@ const mapStrapiEntryToArticle = (item: any, config: StrapiConfig): Article => {
     image: imageUrl,
     breadcrumb: attrs.breadcrumb || 'Home / Therapy Flow Learning Hub',
     isFeatured: !!attrs.Is_Featured,
-    content
+    content,
+    sections: sections.length > 0 ? sections : undefined
   };
 };
 

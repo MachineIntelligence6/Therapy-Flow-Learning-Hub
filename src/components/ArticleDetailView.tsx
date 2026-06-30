@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Loader2 } from 'lucide-react';
 import type { Article } from '../types';
 import { strapiService } from '../services/strapi';
@@ -16,6 +16,7 @@ export const ArticleDetailView: React.FC<ArticleDetailViewProps> = ({
   const [article, setArticle] = useState<Article | null>(initialArticle);
   const [isLoading, setIsLoading] = useState(false);
   const [activeHeadingId, setActiveHeadingId] = useState<string>('');
+  const contentPanelRef = useRef<HTMLDivElement>(null);
 
   // Sync state and fetch full article details if sections are missing
   useEffect(() => {
@@ -43,11 +44,16 @@ export const ArticleDetailView: React.FC<ArticleDetailViewProps> = ({
     fetchFullDetails();
   }, [initialArticle]);
 
-  // Compute headings list dynamically from content headings
+  // Compute headings list dynamically from either dynamic sections or content headings
   const headingsList = React.useMemo(() => {
-    const list: { id: string; label: string; title: string }[] = [];
-    
-    if (article?.content && Array.isArray(article.content)) {
+    if (article?.sections && article.sections.length > 0) {
+      return article.sections.map(sec => ({
+        id: String(sec.id),
+        label: sec.tabLabel || sec.title || 'Section',
+        title: sec.title
+      }));
+    } else if (article?.content && Array.isArray(article.content)) {
+      const list: { id: string; label: string; title: string }[] = [];
       article.content.forEach((block, idx) => {
         if (block.type === 'heading') {
           const text = block.children?.map((c: any) => c.text || '').join('') || '';
@@ -60,18 +66,9 @@ export const ArticleDetailView: React.FC<ArticleDetailViewProps> = ({
           }
         }
       });
+      return list;
     }
-
-    // Default "Overview" heading to keep the premium sidebar layout active if no other headings exist
-    if (list.length === 0) {
-      list.push({
-        id: 'article-overview',
-        label: 'Overview',
-        title: article?.title || 'Overview'
-      });
-    }
-    
-    return list;
+    return [];
   }, [article]);
 
   useEffect(() => {
@@ -80,18 +77,21 @@ export const ArticleDetailView: React.FC<ArticleDetailViewProps> = ({
     }
   }, [headingsList]);
 
-  // Scroll Spy logic to highlight active heading on scroll
+  // Scroll Spy logic to highlight active heading on scroll of the content panel
   useEffect(() => {
-    if (headingsList.length === 0) return;
+    const panel = contentPanelRef.current;
+    if (!panel || headingsList.length === 0) return;
 
     const handleScroll = () => {
       let currentActiveId = headingsList[0].id;
+      const panelRect = panel.getBoundingClientRect();
       
       for (const item of headingsList) {
-        const element = document.getElementById(item.id);
+        const element = document.getElementById(item.id.startsWith('heading-') ? item.id : `section-${item.id}`);
         if (element) {
           const rect = element.getBoundingClientRect();
-          if (rect.top <= 150) {
+          // Check if element has scrolled into view within the panel container bounds
+          if (rect.top - panelRect.top <= 100) {
             currentActiveId = item.id;
           }
         }
@@ -99,25 +99,26 @@ export const ArticleDetailView: React.FC<ArticleDetailViewProps> = ({
       setActiveHeadingId(currentActiveId);
     };
 
-    window.addEventListener('scroll', handleScroll, { passive: true });
+    panel.addEventListener('scroll', handleScroll, { passive: true });
     // Run once on load to highlight initial state
     setTimeout(handleScroll, 100);
 
     return () => {
-      window.removeEventListener('scroll', handleScroll);
+      panel.removeEventListener('scroll', handleScroll);
     };
   }, [headingsList]);
 
   const handleHeadingClick = (id: string) => {
     setActiveHeadingId(id);
-    const element = document.getElementById(id);
-    if (element) {
-      const headerOffset = 100;
-      const elementPosition = element.getBoundingClientRect().top;
-      const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+    const element = document.getElementById(id.startsWith('heading-') ? id : `section-${id}`);
+    const panel = contentPanelRef.current;
+    if (element && panel) {
+      const elementRect = element.getBoundingClientRect();
+      const panelRect = panel.getBoundingClientRect();
+      const relativeTop = elementRect.top - panelRect.top + panel.scrollTop;
       
-      window.scrollTo({
-        top: offsetPosition,
+      panel.scrollTo({
+        top: relativeTop - 20, // 20px spacing padding offset
         behavior: 'smooth'
       });
     }
@@ -207,40 +208,60 @@ export const ArticleDetailView: React.FC<ArticleDetailViewProps> = ({
           <Loader2 className="spin-loading" size={32} />
           <p>Loading content from Strapi...</p>
         </div>
-      ) : headingsList.length > 0 ? (
-        /* Two column layout: Sidebar headings index + Content vertical feed */
+      ) : (article?.content || (article?.sections && article.sections.length > 0)) ? (
+        /* Dynamic layout: Sidebar headings index (optional) + Content vertical feed */
         <div className="detail-tabs-layout">
           {/* Sidebar navigation */}
-          <aside className="tabs-sidebar">
-            {headingsList.map((item) => {
-              const isActive = item.id === activeHeadingId;
-              return (
-                <button
-                  key={item.id}
-                  className={`sidebar-tab-btn ${isActive ? 'tab-btn-active' : ''}`}
-                  onClick={() => handleHeadingClick(item.id)}
-                >
-                  {item.label}
-                </button>
-              );
-            })}
-          </aside>
+          {headingsList.length > 0 && (
+            <aside className="tabs-sidebar">
+              {headingsList.map((item) => {
+                const isActive = item.id === activeHeadingId;
+                return (
+                  <button
+                    key={item.id}
+                    className={`sidebar-tab-btn ${isActive ? 'tab-btn-active' : ''}`}
+                    onClick={() => handleHeadingClick(item.id)}
+                  >
+                    {item.label}
+                  </button>
+                );
+              })}
+            </aside>
+          )}
 
           {/* Display content panel */}
-          <div className="tabs-content-panel">
-            <div className="detail-body rich-content-body" id="article-overview">
-              <div className="section-body-blocks">
-                {renderStrapiBlocks(article?.content)}
+          <div ref={contentPanelRef} className="tabs-content-panel" style={{ width: headingsList.length > 0 ? '72%' : '100%' }}>
+            {article?.sections && article.sections.length > 0 ? (
+              <div className="sections-vertical-list">
+                {article.sections.map((sec) => (
+                  <div key={sec.id} id={`section-${sec.id}`} className="section-content-wrapper" style={{ marginBottom: '48px' }}>
+                    <h2 className="section-heading-title">{sec.title}</h2>
+                    <div className="section-body-blocks">
+                      {renderStrapiBlocks(sec.description)}
+                    </div>
+                    {sec.blogFileUrl && (
+                      <div className="section-file-attachment" style={{ marginTop: '16px' }}>
+                        <a href={sec.blogFileUrl} target="_blank" rel="noopener noreferrer" className="attachment-link-btn">
+                          View Attached File Resources
+                        </a>
+                      </div>
+                    )}
+                  </div>
+                ))}
               </div>
-            </div>
+            ) : (
+              <div className="detail-body rich-content-body" style={{ padding: 0 }}>
+                <div className="section-body-blocks">
+                  {renderStrapiBlocks(article?.content)}
+                </div>
+              </div>
+            )}
           </div>
         </div>
       ) : (
-        <div className="detail-body rich-content-body">
-          <p className="article-intro-fallback">{initialArticle.description}</p>
-          <div className="section-body-blocks">
-            {renderStrapiBlocks(article?.content)}
-          </div>
+        <div className="detail-body">
+          <p>{initialArticle.description}</p>
+          <p className="no-sections-hint">No article content is currently defined for this guide in Strapi CMS.</p>
         </div>
       )}
     </div>
