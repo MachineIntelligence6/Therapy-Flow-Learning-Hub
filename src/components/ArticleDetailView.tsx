@@ -43,15 +43,9 @@ export const ArticleDetailView: React.FC<ArticleDetailViewProps> = ({
     fetchFullDetails();
   }, [initialArticle]);
 
-  // Compute headings list dynamically from either dynamic sections or content headings
+  // Compute headings list dynamically from content headings
   const headingsList = React.useMemo(() => {
-    if (article?.sections && article.sections.length > 0) {
-      return article.sections.map(sec => ({
-        id: String(sec.id),
-        label: sec.tabLabel || sec.title || 'Section',
-        title: sec.title
-      }));
-    } else if (article?.content && Array.isArray(article.content)) {
+    if (article?.content && Array.isArray(article.content)) {
       const list: { id: string; label: string; title: string }[] = [];
       article.content.forEach((block, idx) => {
         if (block.type === 'heading') {
@@ -84,7 +78,7 @@ export const ArticleDetailView: React.FC<ArticleDetailViewProps> = ({
       let currentActiveId = headingsList[0].id;
       
       for (const item of headingsList) {
-        const element = document.getElementById(item.id.startsWith('heading-') ? item.id : `section-${item.id}`);
+        const element = document.getElementById(item.id);
         if (element) {
           const rect = element.getBoundingClientRect();
           if (rect.top <= 150) {
@@ -106,7 +100,7 @@ export const ArticleDetailView: React.FC<ArticleDetailViewProps> = ({
 
   const handleHeadingClick = (id: string) => {
     setActiveHeadingId(id);
-    const element = document.getElementById(id.startsWith('heading-') ? id : `section-${id}`);
+    const element = document.getElementById(id);
     if (element) {
       const headerOffset = 100;
       const elementPosition = element.getBoundingClientRect().top;
@@ -224,37 +218,19 @@ export const ArticleDetailView: React.FC<ArticleDetailViewProps> = ({
 
           {/* Display content panel */}
           <div className="tabs-content-panel">
-            {article?.sections && article.sections.length > 0 ? (
-              <div className="sections-vertical-list">
-                {article.sections.map((sec) => (
-                  <div key={sec.id} id={`section-${sec.id}`} className="section-content-wrapper" style={{ marginBottom: '48px' }}>
-                    <h2 className="section-heading-title">{sec.title}</h2>
-                    <div className="section-body-blocks">
-                      {renderStrapiBlocks(sec.description)}
-                    </div>
-                    {sec.blogFileUrl && (
-                      <div className="section-file-attachment" style={{ marginTop: '16px' }}>
-                        <a href={sec.blogFileUrl} target="_blank" rel="noopener noreferrer" className="attachment-link-btn">
-                          View Attached File Resources
-                        </a>
-                      </div>
-                    )}
-                  </div>
-                ))}
+            <div className="detail-body rich-content-body">
+              <div className="section-body-blocks">
+                {renderStrapiBlocks(article?.content)}
               </div>
-            ) : (
-              <div className="detail-body rich-content-body">
-                <div className="section-body-blocks">
-                  {renderStrapiBlocks(article?.content)}
-                </div>
-              </div>
-            )}
+            </div>
           </div>
         </div>
       ) : (
-        <div className="detail-body">
-          <p>{initialArticle.description}</p>
-          <p className="no-sections-hint">No article content is currently defined for this guide in Strapi CMS.</p>
+        <div className="detail-body rich-content-body">
+          <p className="article-intro-fallback">{initialArticle.description}</p>
+          <div className="section-body-blocks">
+            {renderStrapiBlocks(article?.content)}
+          </div>
         </div>
       )}
     </div>

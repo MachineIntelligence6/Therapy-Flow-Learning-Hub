@@ -1,11 +1,3 @@
-export interface ArticleSection {
-  id: number;
-  tabLabel: string;
-  title: string;
-  description: any[]; // Strapi v5 Blocks structure (array of rich-text nodes)
-  blogFileUrl?: string;
-}
-
 export interface Article {
   id: number;
   title: string;
@@ -16,7 +8,6 @@ export interface Article {
   readTime: string;
   image: string; // Maps from Strapi's 'thumbnail'
   breadcrumb?: string;
-  sections?: ArticleSection[]; // Maps from Strapi's dynamic zone 'Sections'
   isFeatured?: boolean;
   content?: any; // Rich text / Blocks content
 }
