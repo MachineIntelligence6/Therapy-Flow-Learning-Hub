@@ -6,19 +6,41 @@ export interface ArticleSection {
   blogFileUrl?: string;
 }
 
+export type RelatedLinkType = 'product' | 'article' | 'external';
+
+export interface RelatedLink {
+  label: string;
+  url: string;
+  link_type: RelatedLinkType;
+}
+
 export interface Article {
   id: number;
   title: string;
-  description: string; // Maps from Strapi's 'intro'
+  description: string;
   slug: string;
   publishedAt: string;
-  category: string; // Mapped dynamically
+  category: string;
   readTime: string;
-  image: string; // Maps from Strapi's 'thumbnail'
+  image: string;
   breadcrumb?: string;
-  sections?: ArticleSection[]; // Maps from Strapi's dynamic zone 'Sections'
+  sections?: ArticleSection[];
   isFeatured?: boolean;
-  content?: any; // Rich text / Blocks content
+  content?: any;
+  chapter?: string;
+  section?: string;
+  order?: number;
+  relatedLinks?: RelatedLink[];
+}
+
+export interface CurriculumSection {
+  section: string;
+  articles: Article[];
+}
+
+export interface CurriculumChapter {
+  chapter: string;
+  sections: CurriculumSection[];
 }
 
 export interface Category {

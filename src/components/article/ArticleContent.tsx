@@ -29,14 +29,28 @@ function renderText(children: StrapiTextNode[]) {
   });
 }
 
+/** Drop Content "Related links" sections — shown via Related_Links panel instead. */
+function stripEmbeddedRelatedLinks(blocks: StrapiBlock[]): StrapiBlock[] {
+  const relatedHeadingIndex = blocks.findIndex((block) => {
+    if (block.type !== 'heading') return false;
+    const text = getInlineText(block.children).trim().toLowerCase();
+    return text === 'related links' || text === 'related link';
+  });
+
+  if (relatedHeadingIndex === -1) return blocks;
+  return blocks.slice(0, relatedHeadingIndex);
+}
+
 export function ArticleContent({ blocks, articleTitle }: ArticleContentProps) {
   if (!blocks || !Array.isArray(blocks)) {
     return null;
   }
 
+  const contentBlocks = stripEmbeddedRelatedLinks(blocks);
+
   return (
     <article className="article-content-blocks">
-      {blocks.map((block, index) => {
+      {contentBlocks.map((block, index) => {
         switch (block.type) {
           case 'heading': {
             const Tag = `h${block.level}` as 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6';
@@ -126,7 +140,7 @@ export function ArticleContent({ blocks, articleTitle }: ArticleContentProps) {
 }
 
 export function getTableOfContents(blocks: StrapiBlock[]) {
-  return blocks
+  return stripEmbeddedRelatedLinks(blocks)
     .filter((b): b is Extract<StrapiBlock, { type: 'heading' }> => b.type === 'heading')
     .map((block) => ({
       id: slugify(getInlineText(block.children)),

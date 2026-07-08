@@ -149,13 +149,47 @@
   font-weight: 700;
 }
 
+.tabs-sidebar.curriculum-sidebar-wrap {
+  width: 28%;
+  border: none;
+  padding: 0;
+  background: transparent;
+  box-shadow: none;
+  position: sticky;
+  top: 100px;
+  height: fit-content;
+  align-self: start;
+}
+
+.tabs-sidebar.curriculum-sidebar-wrap .curriculum-sidebar {
+  position: static;
+  max-height: calc(100vh - 180px);
+}
+
+.article-detail-header {
+  margin-bottom: 28px;
+}
+
+.article-detail-intro {
+  margin: 0;
+  font-size: 16px;
+  line-height: 1.6;
+  color: var(--Neutral-600, #475569);
+}
+
+@media (max-width: 900px) {
+  .tabs-sidebar.curriculum-sidebar-wrap {
+    width: 100%;
+    position: static;
+  }
+}
+
 .tabs-content-panel {
   width: 72%;
   min-height: 250px;
   max-height: calc(100vh - 240px);
   overflow-y: auto;
   padding-right: 16px;
-  /* Extra space so last headings can scroll to the top and activate correctly */
   padding-bottom: min(55vh, 480px);
   scroll-padding-top: 24px;
 }

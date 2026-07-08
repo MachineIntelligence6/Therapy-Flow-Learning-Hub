@@ -1,20 +1,23 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useMemo } from 'react';
 import { Loader2 } from 'lucide-react';
 import type { Article } from '../types';
 import type { StrapiBlock } from '../types/strapi-blocks';
 import { strapiService } from '../services/strapi';
 import { ArticleContent, getTableOfContents } from './article/ArticleContent';
+import { RelatedLinks } from './article/RelatedLinks';
 import './article/article-content.css';
 import './ArticleDetailView.css';
 
 interface ArticleDetailViewProps {
   article: Article | null;
   onClose: () => void;
+  onSelectArticle?: (article: Article) => void;
 }
 
 export const ArticleDetailView: React.FC<ArticleDetailViewProps> = ({
   article: initialArticle,
-  onClose
+  onClose,
+  onSelectArticle,
 }) => {
   const [article, setArticle] = useState<Article | null>(initialArticle);
   const [isLoading, setIsLoading] = useState(false);
@@ -46,8 +49,8 @@ export const ArticleDetailView: React.FC<ArticleDetailViewProps> = ({
     fetchFullDetails();
   }, [initialArticle]);
 
-  // Sidebar TOC from Content heading blocks (or legacy sections)
-  const headingsList = React.useMemo(() => {
+  // Sidebar from article Content headings (as before)
+  const headingsList = useMemo(() => {
     if (article?.content && Array.isArray(article.content)) {
       return getTableOfContents(article.content as StrapiBlock[]).map((item) => ({
         id: item.id,
@@ -80,7 +83,6 @@ export const ArticleDetailView: React.FC<ArticleDetailViewProps> = ({
       const nearBottom =
         panel.scrollTop + panel.clientHeight >= panel.scrollHeight - 24;
 
-      // At the end of the article, always highlight the last section
       if (nearBottom) {
         setActiveHeadingId(headingsList[headingsList.length - 1].id);
         return;
@@ -93,7 +95,6 @@ export const ArticleDetailView: React.FC<ArticleDetailViewProps> = ({
           document.getElementById(`section-${item.id}`);
         if (element) {
           const rect = element.getBoundingClientRect();
-          // Activate once the heading sits near the top of the content panel
           if (rect.top - panelRect.top <= 80) {
             currentActiveId = item.id;
           }
@@ -120,7 +121,6 @@ export const ArticleDetailView: React.FC<ArticleDetailViewProps> = ({
       const panelRect = panel.getBoundingClientRect();
       const relativeTop = elementRect.top - panelRect.top + panel.scrollTop;
 
-      // Scroll so the full heading sits clearly at the top of the panel
       panel.scrollTo({
         top: Math.max(0, relativeTop - 24),
         behavior: 'smooth',
@@ -135,6 +135,24 @@ export const ArticleDetailView: React.FC<ArticleDetailViewProps> = ({
       ? (article.content as StrapiBlock[])
       : null;
 
+  const displayArticle = article || initialArticle;
+  const chapterLabel = displayArticle.chapter || displayArticle.category;
+  const hasSidebar = headingsList.length > 0;
+
+  const handleRelatedArticle = async (slug: string) => {
+    if (!onSelectArticle) {
+      window.history.pushState(null, '', `/learning-hub/${slug}`);
+      window.location.reload();
+      return;
+    }
+    try {
+      const fetched = await strapiService.getArticleBySlug(slug);
+      if (fetched) onSelectArticle(fetched);
+    } catch (e) {
+      console.error('Failed to open related article', e);
+    }
+  };
+
   return (
     <div className="container article-detail-container animate-fade-in">
       <nav className="breadcrumbs" aria-label="Breadcrumb" style={{ marginBottom: '24px', marginTop: '32px' }}>
@@ -142,13 +160,21 @@ export const ArticleDetailView: React.FC<ArticleDetailViewProps> = ({
           <li className="breadcrumb-item">
             <button onClick={onClose} className="breadcrumb-link">Home</button>
           </li>
-          <li className="breadcrumb-item separator">/</li>
-          <li className="breadcrumb-item">
-            {initialArticle.category}
-          </li>
+          {chapterLabel && (
+            <>
+              <li className="breadcrumb-item separator">/</li>
+              <li className="breadcrumb-item">{chapterLabel}</li>
+            </>
+          )}
+          {displayArticle.section && (
+            <>
+              <li className="breadcrumb-item separator">/</li>
+              <li className="breadcrumb-item">{displayArticle.section}</li>
+            </>
+          )}
           <li className="breadcrumb-item separator">/</li>
           <li className="breadcrumb-item active" aria-current="page">
-            {initialArticle.title}
+            {displayArticle.title}
           </li>
         </ol>
       </nav>
@@ -160,7 +186,7 @@ export const ArticleDetailView: React.FC<ArticleDetailViewProps> = ({
         </div>
       ) : (contentBlocks || (article?.sections && article.sections.length > 0)) ? (
         <div className="detail-tabs-layout">
-          {headingsList.length > 0 && (
+          {hasSidebar && (
             <aside className="tabs-sidebar">
               {headingsList.map((item) => {
                 const isActive = item.id === activeHeadingId;
@@ -180,14 +206,14 @@ export const ArticleDetailView: React.FC<ArticleDetailViewProps> = ({
           <div
             ref={contentPanelRef}
             className="tabs-content-panel"
-            style={{ width: headingsList.length > 0 ? '72%' : '100%' }}
+            style={{ width: hasSidebar ? '72%' : '100%' }}
           >
             {contentBlocks ? (
               <div className="detail-body rich-content-body" style={{ padding: 0 }}>
                 <div className="section-body-blocks">
                   <ArticleContent
                     blocks={contentBlocks}
-                    articleTitle={article?.title || initialArticle.title}
+                    articleTitle={displayArticle.title}
                   />
                 </div>
               </div>
@@ -205,7 +231,7 @@ export const ArticleDetailView: React.FC<ArticleDetailViewProps> = ({
                       {Array.isArray(sec.description) ? (
                         <ArticleContent
                           blocks={sec.description as StrapiBlock[]}
-                          articleTitle={article?.title || initialArticle.title}
+                          articleTitle={displayArticle.title}
                         />
                       ) : null}
                     </div>
@@ -225,6 +251,11 @@ export const ArticleDetailView: React.FC<ArticleDetailViewProps> = ({
                 ))}
               </div>
             ) : null}
+
+            <RelatedLinks
+              links={displayArticle.relatedLinks}
+              onArticleClick={handleRelatedArticle}
+            />
           </div>
         </div>
       ) : (
@@ -233,6 +264,10 @@ export const ArticleDetailView: React.FC<ArticleDetailViewProps> = ({
           <p className="no-sections-hint">
             No article content is currently defined for this guide in Strapi CMS.
           </p>
+          <RelatedLinks
+            links={displayArticle.relatedLinks}
+            onArticleClick={handleRelatedArticle}
+          />
         </div>
       )}
     </div>

@@ -1,4 +1,4 @@
-import type { Article, Category, StrapiConfig } from '../types';
+import type { Article, Category, RelatedLink, StrapiConfig } from '../types';
 import blogImage from '../assets/Blog Image.png';
 
 const STORAGE_KEY = 'learninghub_strapi_config';
@@ -445,6 +445,29 @@ const mapStrapiEntryToArticle = (item: any, config: StrapiConfig): Article => {
     };
   }) : [];
 
+  const rawRelated = attrs.Related_Links || attrs.related_links || attrs.relatedLinks || [];
+  const relatedLinks: RelatedLink[] = Array.isArray(rawRelated)
+    ? rawRelated
+        .map((link: any): RelatedLink | null => {
+          const label = link.label || link.Label || '';
+          const url = link.url || link.URL || '';
+          const link_type = (link.link_type || link.linkType || link.Link_Type || 'external') as RelatedLink['link_type'];
+          if (!label || !url) return null;
+          if (link_type !== 'product' && link_type !== 'article' && link_type !== 'external') {
+            return { label, url, link_type: 'external' };
+          }
+          return { label, url, link_type };
+        })
+        .filter(Boolean) as RelatedLink[]
+    : [];
+
+  const orderValue =
+    attrs.Order !== undefined && attrs.Order !== null
+      ? Number(attrs.Order)
+      : attrs.order !== undefined && attrs.order !== null
+        ? Number(attrs.order)
+        : undefined;
+
   return {
     id,
     title: attrs.title || '',
@@ -457,7 +480,11 @@ const mapStrapiEntryToArticle = (item: any, config: StrapiConfig): Article => {
     breadcrumb: attrs.breadcrumb || 'Home / Therapy Flow Learning Hub',
     isFeatured: !!attrs.Is_Featured,
     content,
-    sections: sections.length > 0 ? sections : undefined
+    sections: sections.length > 0 ? sections : undefined,
+    chapter: attrs.Chapter || attrs.chapter || undefined,
+    section: attrs.Section || attrs.section || undefined,
+    order: Number.isFinite(orderValue) ? orderValue : undefined,
+    relatedLinks: relatedLinks.length > 0 ? relatedLinks : undefined,
   };
 };
 
@@ -537,9 +564,14 @@ export const strapiService = {
     }
 
     try {
-      const json = await apiFetch('/api/learning-hubs?populate=*', config);
+      const json = await apiFetch(
+        '/api/learning-hubs?populate=*&sort=Order:asc&pagination[pageSize]=100',
+        config
+      );
       if (json.data && Array.isArray(json.data)) {
-        return json.data.map((item: any) => mapStrapiEntryToArticle(item, config));
+        return json.data
+          .map((item: any) => mapStrapiEntryToArticle(item, config))
+          .sort((a: Article, b: Article) => (a.order ?? 999999) - (b.order ?? 999999));
       }
       return MOCK_ARTICLES;
     } catch (e) {

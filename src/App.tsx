@@ -229,6 +229,7 @@ function App() {
         <ArticleDetailView
           article={selectedArticle}
           onClose={handleCloseModal}
+          onSelectArticle={handleReadArticle}
         />
       ) : (
         <>
