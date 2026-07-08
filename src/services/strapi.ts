@@ -556,7 +556,17 @@ export const strapiService = {
     }
 
     try {
-      const json = await apiFetch(`/api/learning-hubs?filters[slug][$eq]=${slug}&populate=*`, config);
+      // Prefer slug endpoint (returns full Content); fall back to filter query
+      try {
+        const bySlug = await apiFetch(`/api/learning-hubs/slug/${encodeURIComponent(slug)}`, config);
+        if (bySlug.data) {
+          return mapStrapiEntryToArticle(bySlug.data, config);
+        }
+      } catch {
+        // slug route may be unavailable on older APIs
+      }
+
+      const json = await apiFetch(`/api/learning-hubs?filters[slug][$eq]=${encodeURIComponent(slug)}&populate=*`, config);
       if (json.data && Array.isArray(json.data) && json.data.length > 0) {
         return mapStrapiEntryToArticle(json.data[0], config);
       }

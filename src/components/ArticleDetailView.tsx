@@ -1,7 +1,10 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Loader2 } from 'lucide-react';
 import type { Article } from '../types';
+import type { StrapiBlock } from '../types/strapi-blocks';
 import { strapiService } from '../services/strapi';
+import { ArticleContent, getTableOfContents } from './article/ArticleContent';
+import './article/article-content.css';
 import './ArticleDetailView.css';
 
 interface ArticleDetailViewProps {
@@ -18,7 +21,6 @@ export const ArticleDetailView: React.FC<ArticleDetailViewProps> = ({
   const [activeHeadingId, setActiveHeadingId] = useState<string>('');
   const contentPanelRef = useRef<HTMLDivElement>(null);
 
-  // Sync state and fetch full article details if sections are missing
   useEffect(() => {
     if (!initialArticle) {
       setArticle(null);
@@ -44,29 +46,21 @@ export const ArticleDetailView: React.FC<ArticleDetailViewProps> = ({
     fetchFullDetails();
   }, [initialArticle]);
 
-  // Compute headings list dynamically from either dynamic sections or content headings
+  // Sidebar TOC from Content heading blocks (or legacy sections)
   const headingsList = React.useMemo(() => {
+    if (article?.content && Array.isArray(article.content)) {
+      return getTableOfContents(article.content as StrapiBlock[]).map((item) => ({
+        id: item.id,
+        label: item.label,
+        title: item.label,
+      }));
+    }
     if (article?.sections && article.sections.length > 0) {
-      return article.sections.map(sec => ({
+      return article.sections.map((sec) => ({
         id: String(sec.id),
         label: sec.tabLabel || sec.title || 'Section',
-        title: sec.title
+        title: sec.title,
       }));
-    } else if (article?.content && Array.isArray(article.content)) {
-      const list: { id: string; label: string; title: string }[] = [];
-      article.content.forEach((block, idx) => {
-        if (block.type === 'heading') {
-          const text = block.children?.map((c: any) => c.text || '').join('') || '';
-          if (text.trim()) {
-            list.push({
-              id: `heading-${idx}`,
-              label: text,
-              title: text
-            });
-          }
-        }
-      });
-      return list;
     }
     return [];
   }, [article]);
@@ -77,21 +71,30 @@ export const ArticleDetailView: React.FC<ArticleDetailViewProps> = ({
     }
   }, [headingsList]);
 
-  // Scroll Spy logic to highlight active heading on scroll of the content panel
   useEffect(() => {
     const panel = contentPanelRef.current;
     if (!panel || headingsList.length === 0) return;
 
     const handleScroll = () => {
-      let currentActiveId = headingsList[0].id;
       const panelRect = panel.getBoundingClientRect();
-      
+      const nearBottom =
+        panel.scrollTop + panel.clientHeight >= panel.scrollHeight - 24;
+
+      // At the end of the article, always highlight the last section
+      if (nearBottom) {
+        setActiveHeadingId(headingsList[headingsList.length - 1].id);
+        return;
+      }
+
+      let currentActiveId = headingsList[0].id;
       for (const item of headingsList) {
-        const element = document.getElementById(item.id.startsWith('heading-') ? item.id : `section-${item.id}`);
+        const element =
+          document.getElementById(item.id) ||
+          document.getElementById(`section-${item.id}`);
         if (element) {
           const rect = element.getBoundingClientRect();
-          // Check if element has scrolled into view within the panel container bounds
-          if (rect.top - panelRect.top <= 100) {
+          // Activate once the heading sits near the top of the content panel
+          if (rect.top - panelRect.top <= 80) {
             currentActiveId = item.id;
           }
         }
@@ -100,7 +103,6 @@ export const ArticleDetailView: React.FC<ArticleDetailViewProps> = ({
     };
 
     panel.addEventListener('scroll', handleScroll, { passive: true });
-    // Run once on load to highlight initial state
     setTimeout(handleScroll, 100);
 
     return () => {
@@ -110,82 +112,31 @@ export const ArticleDetailView: React.FC<ArticleDetailViewProps> = ({
 
   const handleHeadingClick = (id: string) => {
     setActiveHeadingId(id);
-    const element = document.getElementById(id.startsWith('heading-') ? id : `section-${id}`);
+    const element =
+      document.getElementById(id) || document.getElementById(`section-${id}`);
     const panel = contentPanelRef.current;
     if (element && panel) {
       const elementRect = element.getBoundingClientRect();
       const panelRect = panel.getBoundingClientRect();
       const relativeTop = elementRect.top - panelRect.top + panel.scrollTop;
-      
+
+      // Scroll so the full heading sits clearly at the top of the panel
       panel.scrollTo({
-        top: relativeTop - 20, // 20px spacing padding offset
-        behavior: 'smooth'
+        top: Math.max(0, relativeTop - 24),
+        behavior: 'smooth',
       });
     }
   };
 
   if (!initialArticle) return null;
 
-  // Strapi Rich Text Blocks Renderer
-  const renderBlockNode = (node: any, index: number): React.ReactNode => {
-    if (node.type === 'text') {
-      let content: React.ReactNode = node.text || '';
-      if (node.bold) content = <strong key={index}>{content}</strong>;
-      if (node.italic) content = <em key={index}>{content}</em>;
-      if (node.underline) content = <u key={index}>{content}</u>;
-      if (node.strikethrough) content = <del key={index}>{content}</del>;
-      return content;
-    }
-    
-    const children = node.children ? node.children.map((child: any, i: number) => renderBlockNode(child, i)) : null;
-    
-    if (node.type === 'link') {
-      return (
-        <a key={index} href={node.url} target="_blank" rel="noopener noreferrer" className="inline-link">
-          {children}
-        </a>
-      );
-    }
-    return <span key={index}>{children}</span>;
-  };
-
-  const renderStrapiBlocks = (blocks: any[] | any): React.ReactNode => {
-    if (!blocks || !Array.isArray(blocks)) {
-      if (typeof blocks === 'string') {
-        return <p>{blocks}</p>;
-      }
-      return null;
-    }
-
-    return blocks.map((block, idx) => {
-      const children = block.children ? block.children.map((child: any, i: number) => renderBlockNode(child, i)) : null;
-      
-      switch (block.type) {
-        case 'paragraph':
-          return <p key={idx}>{children}</p>;
-        case 'heading':
-          const HeadingTag = block.level ? `h${block.level}` : 'h3';
-          const headingId = `heading-${idx}`;
-          // @ts-ignore
-          return <HeadingTag key={idx} id={headingId} className="block-heading">{children}</HeadingTag>;
-        case 'list':
-          if (block.format === 'ordered') {
-            return <ol key={idx} className="block-ol">{children}</ol>;
-          }
-          return <ul key={idx} className="block-ul">{children}</ul>;
-        case 'list-item':
-          return <li key={idx} className="block-li">{children}</li>;
-        case 'quote':
-          return <blockquote key={idx} className="block-quote">{children}</blockquote>;
-        default:
-          return <div key={idx} className="block-default">{children}</div>;
-      }
-    });
-  };
+  const contentBlocks =
+    article?.content && Array.isArray(article.content)
+      ? (article.content as StrapiBlock[])
+      : null;
 
   return (
     <div className="container article-detail-container animate-fade-in">
-      {/* Breadcrumbs matching design exactly */}
       <nav className="breadcrumbs" aria-label="Breadcrumb" style={{ marginBottom: '24px', marginTop: '32px' }}>
         <ol className="breadcrumb-list">
           <li className="breadcrumb-item">
@@ -202,16 +153,13 @@ export const ArticleDetailView: React.FC<ArticleDetailViewProps> = ({
         </ol>
       </nav>
 
-      {/* Loading details state */}
       {isLoading ? (
         <div className="modal-inner-loader">
           <Loader2 className="spin-loading" size={32} />
           <p>Loading content from Strapi...</p>
         </div>
-      ) : (article?.content || (article?.sections && article.sections.length > 0)) ? (
-        /* Dynamic layout: Sidebar headings index (optional) + Content vertical feed */
+      ) : (contentBlocks || (article?.sections && article.sections.length > 0)) ? (
         <div className="detail-tabs-layout">
-          {/* Sidebar navigation */}
           {headingsList.length > 0 && (
             <aside className="tabs-sidebar">
               {headingsList.map((item) => {
@@ -229,19 +177,46 @@ export const ArticleDetailView: React.FC<ArticleDetailViewProps> = ({
             </aside>
           )}
 
-          {/* Display content panel */}
-          <div ref={contentPanelRef} className="tabs-content-panel" style={{ width: headingsList.length > 0 ? '72%' : '100%' }}>
-            {article?.sections && article.sections.length > 0 ? (
+          <div
+            ref={contentPanelRef}
+            className="tabs-content-panel"
+            style={{ width: headingsList.length > 0 ? '72%' : '100%' }}
+          >
+            {contentBlocks ? (
+              <div className="detail-body rich-content-body" style={{ padding: 0 }}>
+                <div className="section-body-blocks">
+                  <ArticleContent
+                    blocks={contentBlocks}
+                    articleTitle={article?.title || initialArticle.title}
+                  />
+                </div>
+              </div>
+            ) : article?.sections && article.sections.length > 0 ? (
               <div className="sections-vertical-list">
                 {article.sections.map((sec) => (
-                  <div key={sec.id} id={`section-${sec.id}`} className="section-content-wrapper" style={{ marginBottom: '48px' }}>
+                  <div
+                    key={sec.id}
+                    id={`section-${sec.id}`}
+                    className="section-content-wrapper"
+                    style={{ marginBottom: '48px' }}
+                  >
                     <h2 className="section-heading-title">{sec.title}</h2>
                     <div className="section-body-blocks">
-                      {renderStrapiBlocks(sec.description)}
+                      {Array.isArray(sec.description) ? (
+                        <ArticleContent
+                          blocks={sec.description as StrapiBlock[]}
+                          articleTitle={article?.title || initialArticle.title}
+                        />
+                      ) : null}
                     </div>
                     {sec.blogFileUrl && (
                       <div className="section-file-attachment" style={{ marginTop: '16px' }}>
-                        <a href={sec.blogFileUrl} target="_blank" rel="noopener noreferrer" className="attachment-link-btn">
+                        <a
+                          href={sec.blogFileUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="attachment-link-btn"
+                        >
                           View Attached File Resources
                         </a>
                       </div>
@@ -249,19 +224,15 @@ export const ArticleDetailView: React.FC<ArticleDetailViewProps> = ({
                   </div>
                 ))}
               </div>
-            ) : (
-              <div className="detail-body rich-content-body" style={{ padding: 0 }}>
-                <div className="section-body-blocks">
-                  {renderStrapiBlocks(article?.content)}
-                </div>
-              </div>
-            )}
+            ) : null}
           </div>
         </div>
       ) : (
         <div className="detail-body">
           <p>{initialArticle.description}</p>
-          <p className="no-sections-hint">No article content is currently defined for this guide in Strapi CMS.</p>
+          <p className="no-sections-hint">
+            No article content is currently defined for this guide in Strapi CMS.
+          </p>
         </div>
       )}
     </div>
