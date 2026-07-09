@@ -1,7 +1,7 @@
 {
   "navigationFallback": {
     "rewrite": "/index.html",
-    "exclude": ["/assets/*", "/*.css", "/*.js", "/*.svg", "/*.png", "/*.webp", "/*.xml", "/*.txt", "/*/*.html"]
+    "exclude": ["/assets/*", "/*.css", "/*.js", "/*.svg", "/*.png", "/*.webp", "/*.xml", "/*.txt", "/*/index.html"]
   },
   "routes": [
     { "route": "/learning-hub", "redirect": "/", "statusCode": 301 },
