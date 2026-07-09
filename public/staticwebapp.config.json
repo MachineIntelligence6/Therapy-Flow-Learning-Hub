@@ -4,8 +4,7 @@
     "exclude": ["/assets/*", "/*.css", "/*.js", "/*.svg", "/*.png", "/*.webp", "/*.xml", "/*.txt"]
   },
   "routes": [
-    { "route": "/learning-hub", "redirect": "/", "statusCode": 301 },
-    { "route": "/learning-hub/*", "redirect": "/", "statusCode": 301 }
+    { "route": "/learning-hub", "redirect": "/", "statusCode": 301 }
   ],
   "globalHeaders": {
     "X-Content-Type-Options": "nosniff"
