@@ -17,7 +17,7 @@ export type StrapiMedia = {
   alternativeText?: string | null;
   width?: number | null;
   height?: number | null;
-  formats?: Record<string, { url?: string | null }>;
+  formats?: Record<string, { url?: string | null; width?: number | null }>;
 };
 
 export type GlobalSiteSettings = {

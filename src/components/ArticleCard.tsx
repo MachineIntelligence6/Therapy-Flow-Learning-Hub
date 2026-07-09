@@ -50,6 +50,8 @@ export const ArticleCard: React.FC<ArticleCardProps> = ({
         {article.image ? (
           <img
             src={article.image}
+            srcSet={article.imageSrcSet}
+            sizes={article.imageSizes}
             alt={article.title}
             className="card-image"
             loading={isFeatured ? 'eager' : 'lazy'}

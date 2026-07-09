@@ -22,7 +22,9 @@ export interface Article {
   publishedAt: string;
   category: string;
   readTime: string;
-  image: string;
+  image?: string;
+  imageSrcSet?: string;
+  imageSizes?: string;
   breadcrumb?: string;
   sections?: ArticleSection[];
   isFeatured?: boolean;

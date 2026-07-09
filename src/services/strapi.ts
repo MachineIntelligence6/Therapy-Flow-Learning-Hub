@@ -1,7 +1,6 @@
 import type { Article, Category, RelatedLink, StrapiConfig } from '../types';
 import type { GlobalSiteSettings, StrapiSeoFields } from '../lib/seo/types';
-import { resolveMediaUrl } from '../lib/seo/resolveSeo';
-import blogImage from '../assets/Blog Image.png';
+import { resolveCardImage } from '../lib/media';
 
 const STORAGE_KEY = 'learninghub_strapi_config';
 const DEFAULT_API_URL = import.meta.env.VITE_STRAPI_API_URL || 'http://localhost:1337';
@@ -17,7 +16,6 @@ const MOCK_ARTICLES: Article[] = [
     publishedAt: '2026-06-29T12:00:00.000Z',
     category: 'Getting Started',
     readTime: '5 min read',
-    image: blogImage,
     breadcrumb: 'Home / Therapy Flow Learning Hub',
     sections: [
       {
@@ -63,7 +61,6 @@ const MOCK_ARTICLES: Article[] = [
     publishedAt: '2026-06-28T10:00:00.000Z',
     category: 'Patient Portal',
     readTime: '4 min read',
-    image: blogImage,
     sections: []
   },
   {
@@ -74,7 +71,6 @@ const MOCK_ARTICLES: Article[] = [
     publishedAt: '2026-06-27T09:15:00.000Z',
     category: 'Dashboard',
     readTime: '6 min read',
-    image: blogImage,
     sections: []
   },
   {
@@ -85,7 +81,6 @@ const MOCK_ARTICLES: Article[] = [
     publishedAt: '2026-06-26T14:30:00.000Z',
     category: 'Scheduling',
     readTime: '5 min read',
-    image: blogImage,
     sections: []
   },
   {
@@ -96,7 +91,6 @@ const MOCK_ARTICLES: Article[] = [
     publishedAt: '2026-06-25T11:45:00.000Z',
     category: 'Billing',
     readTime: '8 min read',
-    image: blogImage,
     sections: []
   },
   {
@@ -107,7 +101,6 @@ const MOCK_ARTICLES: Article[] = [
     publishedAt: '2026-06-24T08:00:00.000Z',
     category: 'Clinical',
     readTime: '7 min read',
-    image: blogImage,
     sections: []
   },
   {
@@ -118,7 +111,6 @@ const MOCK_ARTICLES: Article[] = [
     publishedAt: '2026-06-23T10:00:00.000Z',
     category: 'Access',
     readTime: '5 min read',
-    image: blogImage,
     sections: []
   },
   {
@@ -129,7 +121,6 @@ const MOCK_ARTICLES: Article[] = [
     publishedAt: '2026-06-22T12:00:00.000Z',
     category: 'Security',
     readTime: '9 min read',
-    image: blogImage,
     sections: []
   },
   {
@@ -140,7 +131,6 @@ const MOCK_ARTICLES: Article[] = [
     publishedAt: '2026-06-21T15:00:00.000Z',
     category: 'Settings',
     readTime: '6 min read',
-    image: blogImage,
     sections: []
   },
   {
@@ -151,7 +141,6 @@ const MOCK_ARTICLES: Article[] = [
     publishedAt: '2026-06-20T10:00:00.000Z',
     category: 'Patient Portal',
     readTime: '4 min read',
-    image: blogImage,
     sections: []
   },
   {
@@ -162,7 +151,6 @@ const MOCK_ARTICLES: Article[] = [
     publishedAt: '2026-06-19T09:00:00.000Z',
     category: 'Clinical',
     readTime: '7 min read',
-    image: blogImage,
     sections: []
   },
   {
@@ -173,7 +161,6 @@ const MOCK_ARTICLES: Article[] = [
     publishedAt: '2026-06-18T14:00:00.000Z',
     category: 'Scheduling',
     readTime: '5 min read',
-    image: blogImage,
     sections: []
   },
   {
@@ -184,7 +171,6 @@ const MOCK_ARTICLES: Article[] = [
     publishedAt: '2026-06-17T11:00:00.000Z',
     category: 'Billing',
     readTime: '8 min read',
-    image: blogImage,
     sections: []
   },
   {
@@ -195,7 +181,6 @@ const MOCK_ARTICLES: Article[] = [
     publishedAt: '2026-06-16T08:00:00.000Z',
     category: 'Clinical',
     readTime: '6 min read',
-    image: blogImage,
     sections: []
   },
   {
@@ -206,7 +191,6 @@ const MOCK_ARTICLES: Article[] = [
     publishedAt: '2026-06-15T10:00:00.000Z',
     category: 'Access',
     readTime: '5 min read',
-    image: blogImage,
     sections: []
   },
   {
@@ -217,7 +201,6 @@ const MOCK_ARTICLES: Article[] = [
     publishedAt: '2026-06-14T12:00:00.000Z',
     category: 'Security',
     readTime: '9 min read',
-    image: blogImage,
     sections: []
   },
   {
@@ -228,7 +211,6 @@ const MOCK_ARTICLES: Article[] = [
     publishedAt: '2026-06-13T15:00:00.000Z',
     category: 'Settings',
     readTime: '6 min read',
-    image: blogImage,
     sections: []
   },
   {
@@ -239,7 +221,6 @@ const MOCK_ARTICLES: Article[] = [
     publishedAt: '2026-06-12T10:00:00.000Z',
     category: 'Patient Portal',
     readTime: '4 min read',
-    image: blogImage,
     sections: []
   },
   {
@@ -250,7 +231,6 @@ const MOCK_ARTICLES: Article[] = [
     publishedAt: '2026-06-11T09:00:00.000Z',
     category: 'Patient Portal',
     readTime: '7 min read',
-    image: blogImage,
     sections: []
   },
   {
@@ -261,7 +241,6 @@ const MOCK_ARTICLES: Article[] = [
     publishedAt: '2026-06-10T14:00:00.000Z',
     category: 'Clinical',
     readTime: '5 min read',
-    image: blogImage,
     sections: []
   },
   {
@@ -272,7 +251,6 @@ const MOCK_ARTICLES: Article[] = [
     publishedAt: '2026-06-09T11:00:00.000Z',
     category: 'Billing',
     readTime: '8 min read',
-    image: blogImage,
     sections: []
   },
   {
@@ -283,7 +261,6 @@ const MOCK_ARTICLES: Article[] = [
     publishedAt: '2026-06-08T08:00:00.000Z',
     category: 'Clinical',
     readTime: '6 min read',
-    image: blogImage,
     sections: []
   },
   {
@@ -294,7 +271,6 @@ const MOCK_ARTICLES: Article[] = [
     publishedAt: '2026-06-07T10:00:00.000Z',
     category: 'Security',
     readTime: '5 min read',
-    image: blogImage,
     sections: []
   },
   {
@@ -305,7 +281,6 @@ const MOCK_ARTICLES: Article[] = [
     publishedAt: '2026-06-06T12:00:00.000Z',
     category: 'Settings',
     readTime: '9 min read',
-    image: blogImage,
     sections: []
   },
   {
@@ -316,7 +291,6 @@ const MOCK_ARTICLES: Article[] = [
     publishedAt: '2026-06-05T15:00:00.000Z',
     category: 'Settings',
     readTime: '6 min read',
-    image: blogImage,
     sections: []
   }
 ];
@@ -398,13 +372,22 @@ const mapStrapiEntryToArticle = (item: any, config: StrapiConfig): Article => {
   const attrs = item.attributes ? item.attributes : item;
 
   // 1. Image parsing (prefer responsive Strapi formats for cards)
-  let imageUrl = blogImage;
+  let image: string | undefined;
+  let imageSrcSet: string | undefined;
+  let imageSizes: string | undefined;
+
   if (attrs.Card_Image) {
     const media = attrs.Card_Image.data ? attrs.Card_Image.data : attrs.Card_Image;
     if (media) {
       const mediaAttrs = media.attributes ? media.attributes : media;
-      const resolved = resolveMediaUrl(config.apiUrl, mediaAttrs);
-      if (resolved) imageUrl = resolved;
+      const cardImage = resolveCardImage(
+        config.apiUrl,
+        mediaAttrs,
+        attrs.Is_Featured ? 'featured' : 'grid',
+      );
+      image = cardImage.src;
+      imageSrcSet = cardImage.srcSet;
+      imageSizes = cardImage.sizes;
     }
   } else if (attrs.thumbnail) {
     // Backward compatibility fallback for thumbnail
@@ -413,7 +396,7 @@ const mapStrapiEntryToArticle = (item: any, config: StrapiConfig): Article => {
       const mediaAttrs = media.attributes ? media.attributes : media;
       const url = mediaAttrs.url;
       if (url) {
-        imageUrl = url.startsWith('/') ? `${config.apiUrl}${url}` : url;
+        image = url.startsWith('/') ? `${config.apiUrl}${url}` : url;
       }
     }
   }
@@ -493,7 +476,9 @@ const mapStrapiEntryToArticle = (item: any, config: StrapiConfig): Article => {
     publishedAt,
     category: attrs.Category_Tag || attrs.category || 'General',
     readTime,
-    image: imageUrl,
+    image,
+    imageSrcSet,
+    imageSizes,
     breadcrumb: attrs.breadcrumb || 'Home / Therapy Flow Learning Hub',
     isFeatured: !!attrs.Is_Featured,
     content,

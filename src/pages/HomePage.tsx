@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Loader2, AlertCircle } from 'lucide-react';
+import { AlertCircle } from 'lucide-react';
 import { Header } from '../components/Header';
 import { Hero } from '../components/Hero';
 import { ArticleCard } from '../components/ArticleCard';
@@ -13,6 +13,16 @@ import type { GlobalSiteSettings } from '../lib/seo/types';
 import type { Article } from '../types';
 
 const CARDS_PER_PAGE = 8;
+
+function ArticlesGridSkeleton() {
+  return (
+    <div className="articles-grid articles-grid-skeleton" aria-hidden="true">
+      {Array.from({ length: CARDS_PER_PAGE }).map((_, index) => (
+        <div key={index} className="article-card-skeleton" />
+      ))}
+    </div>
+  );
+}
 
 export const HomePage = () => {
   const navigate = useNavigate();
@@ -48,6 +58,26 @@ export const HomePage = () => {
 
     loadContent();
   }, []);
+
+  useEffect(() => {
+    if (!featuredArticle?.image) return;
+
+    const link = document.createElement('link');
+    link.rel = 'preload';
+    link.as = 'image';
+    link.href = featuredArticle.image;
+    if (featuredArticle.imageSrcSet) {
+      link.setAttribute('imagesrcset', featuredArticle.imageSrcSet);
+    }
+    if (featuredArticle.imageSizes) {
+      link.setAttribute('imagesizes', featuredArticle.imageSizes);
+    }
+    document.head.appendChild(link);
+
+    return () => {
+      document.head.removeChild(link);
+    };
+  }, [featuredArticle]);
 
   const config = strapiService.getConfig();
   const resolvedSeo = useMemo(
@@ -178,13 +208,10 @@ export const HomePage = () => {
         )}
       </div>
 
-      <main id="articles-main-section" className="main-content flex-grow">
+      <main id="articles-main-section" className={`main-content flex-grow${isLoading ? ' main-content-loading' : ''}`}>
         <div className="container">
           {isLoading ? (
-            <div className="loader-container">
-              <Loader2 className="spinner-icon" size={48} />
-              <p>Loading learning resources...</p>
-            </div>
+            <ArticlesGridSkeleton />
           ) : fetchError ? (
             <div className="error-container">
               <AlertCircle size={48} className="error-icon" />
