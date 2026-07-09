@@ -31,6 +31,8 @@ export interface Article {
   section?: string;
   order?: number;
   relatedLinks?: RelatedLink[];
+  seo?: import('../lib/seo/types').StrapiSeoFields | null;
+  updatedAt?: string;
 }
 
 export interface CurriculumSection {

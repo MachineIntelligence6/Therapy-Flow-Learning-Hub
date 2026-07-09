@@ -1,8 +1,12 @@
 import type { Article, Category, RelatedLink, StrapiConfig } from '../types';
+import type { GlobalSiteSettings, StrapiSeoFields } from '../lib/seo/types';
+import { resolveMediaUrl } from '../lib/seo/resolveSeo';
 import blogImage from '../assets/Blog Image.png';
 
 const STORAGE_KEY = 'learninghub_strapi_config';
-const DEFAULT_API_URL = 'http://localhost:1337';
+const DEFAULT_API_URL = import.meta.env.VITE_STRAPI_API_URL || 'http://localhost:1337';
+const STRAPI_TOKEN = import.meta.env.VITE_STRAPI_API_TOKEN as string | undefined;
+const USE_MOCK_IN_DEV = !import.meta.env.PROD && import.meta.env.VITE_STRAPI_ENABLED !== 'true';
 
 const MOCK_ARTICLES: Article[] = [
   {
@@ -317,15 +321,28 @@ const MOCK_ARTICLES: Article[] = [
   }
 ];
 
-// Centralized fetch helper for Strapi endpoints
 const apiFetch = async (endpoint: string, config: StrapiConfig): Promise<any> => {
   const baseUrl = config.apiUrl || DEFAULT_API_URL;
-  const response = await fetch(`${baseUrl}${endpoint}`);
+  const headers: HeadersInit = {
+    Accept: 'application/json',
+    'Content-Type': 'application/json',
+  };
+  if (STRAPI_TOKEN) {
+    headers.Authorization = `Bearer ${STRAPI_TOKEN}`;
+  }
+
+  const response = await fetch(`${baseUrl}${endpoint}`, { headers });
   if (!response.ok) {
     throw new Error(`API request failed for ${endpoint}: ${response.statusText}`);
   }
   return response.json();
 };
+
+const ARTICLE_POPULATE =
+  'populate[Card_Image]=true&populate[SEO][populate]=OG_Image&populate[Content]=true&populate[Related_Links]=true';
+
+const GLOBAL_SETTINGS_POPULATE =
+  'populate[LearningHub_SEO][populate]=OG_Image&populate=Default_OG_Image&populate=Organization_Logo';
 
 // Helper to calculate reading time based on content block words count
 const calculateReadingTime = (content: any, sections: any[] | undefined): string => {
@@ -380,16 +397,14 @@ const mapStrapiEntryToArticle = (item: any, config: StrapiConfig): Article => {
   const id = item.id;
   const attrs = item.attributes ? item.attributes : item;
 
-  // 1. Image parsing (points cleanly to Cloudflare R2 media paths or local uploads)
+  // 1. Image parsing (prefer responsive Strapi formats for cards)
   let imageUrl = blogImage;
   if (attrs.Card_Image) {
     const media = attrs.Card_Image.data ? attrs.Card_Image.data : attrs.Card_Image;
     if (media) {
       const mediaAttrs = media.attributes ? media.attributes : media;
-      const url = mediaAttrs.url;
-      if (url) {
-        imageUrl = url.startsWith('/') ? `${config.apiUrl}${url}` : url;
-      }
+      const resolved = resolveMediaUrl(config.apiUrl, mediaAttrs);
+      if (resolved) imageUrl = resolved;
     }
   } else if (attrs.thumbnail) {
     // Backward compatibility fallback for thumbnail
@@ -468,6 +483,8 @@ const mapStrapiEntryToArticle = (item: any, config: StrapiConfig): Article => {
         ? Number(attrs.order)
         : undefined;
 
+  const seo: StrapiSeoFields | null = attrs.SEO || attrs.seo || null;
+
   return {
     id,
     title: attrs.title || '',
@@ -485,6 +502,8 @@ const mapStrapiEntryToArticle = (item: any, config: StrapiConfig): Article => {
     section: attrs.Section || attrs.section || undefined,
     order: Number.isFinite(orderValue) ? orderValue : undefined,
     relatedLinks: relatedLinks.length > 0 ? relatedLinks : undefined,
+    seo,
+    updatedAt: attrs.updatedAt || publishedAt,
   };
 };
 
@@ -493,10 +512,10 @@ export const strapiService = {
     const envApiUrl = import.meta.env.VITE_STRAPI_API_URL;
     const envEnabled = import.meta.env.VITE_STRAPI_ENABLED;
 
-    if (envApiUrl !== undefined || envEnabled !== undefined) {
+    if (import.meta.env.PROD || envApiUrl !== undefined || envEnabled !== undefined) {
       return {
         apiUrl: envApiUrl || DEFAULT_API_URL,
-        isEnabled: envEnabled === 'true' || envEnabled === true
+        isEnabled: import.meta.env.PROD || envEnabled === 'true' || envEnabled === true,
       };
     }
 
@@ -513,6 +532,19 @@ export const strapiService = {
 
   saveConfig(config: StrapiConfig): void {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(config));
+  },
+
+  async getGlobalSiteSettings(): Promise<GlobalSiteSettings | null> {
+    const config = this.getConfig();
+    if (!config.isEnabled) return null;
+
+    try {
+      const json = await apiFetch(`/api/global-site-settings?${GLOBAL_SETTINGS_POPULATE}`, config);
+      return json.data || null;
+    } catch (e) {
+      console.error('Failed fetching global site settings', e);
+      return null;
+    }
   },
 
   async testConnection(apiUrl: string): Promise<boolean> {
@@ -542,55 +574,61 @@ export const strapiService = {
   async getFeaturedArticle(): Promise<Article | null> {
     const config = this.getConfig();
     if (!config.isEnabled) {
-      return MOCK_ARTICLES.length > 0 ? MOCK_ARTICLES[0] : null;
+      return USE_MOCK_IN_DEV && MOCK_ARTICLES.length > 0 ? MOCK_ARTICLES[0] : null;
     }
 
     try {
-      const json = await apiFetch('/api/learning-hubs?filters[Is_Featured][$eq]=true&populate=*', config);
+      const json = await apiFetch(
+        `/api/learning-hubs?filters[Is_Featured][$eq]=true&${ARTICLE_POPULATE}&pagination[pageSize]=1`,
+        config,
+      );
       if (json.data && Array.isArray(json.data) && json.data.length > 0) {
         return mapStrapiEntryToArticle(json.data[0], config);
       }
       return null;
     } catch (e) {
       console.error('Failed fetching featured article from Strapi, falling back to mock.', e);
-      return MOCK_ARTICLES.length > 0 ? MOCK_ARTICLES[0] : null;
+      return USE_MOCK_IN_DEV && MOCK_ARTICLES.length > 0 ? MOCK_ARTICLES[0] : null;
     }
   },
 
   async getArticles(): Promise<Article[]> {
     const config = this.getConfig();
     if (!config.isEnabled) {
-      return MOCK_ARTICLES;
+      return USE_MOCK_IN_DEV ? MOCK_ARTICLES : [];
     }
 
     try {
       const json = await apiFetch(
-        '/api/learning-hubs?populate=*&sort=Order:asc&pagination[pageSize]=100',
-        config
+        `/api/learning-hubs?${ARTICLE_POPULATE}&sort=Order:asc&pagination[pageSize]=100`,
+        config,
       );
       if (json.data && Array.isArray(json.data)) {
         return json.data
           .map((item: any) => mapStrapiEntryToArticle(item, config))
           .sort((a: Article, b: Article) => (a.order ?? 999999) - (b.order ?? 999999));
       }
-      return MOCK_ARTICLES;
+      return USE_MOCK_IN_DEV ? MOCK_ARTICLES : [];
     } catch (e) {
       console.error('Failed fetching learning hubs from Strapi, falling back to mock.', e);
-      return MOCK_ARTICLES;
+      return USE_MOCK_IN_DEV ? MOCK_ARTICLES : [];
     }
   },
 
   async getArticleBySlug(slug: string): Promise<Article | null> {
     const config = this.getConfig();
     if (!config.isEnabled) {
+      if (!USE_MOCK_IN_DEV) return null;
       const mock = MOCK_ARTICLES.find(a => a.slug === slug);
       return mock || null;
     }
 
     try {
-      // Prefer slug endpoint (returns full Content); fall back to filter query
       try {
-        const bySlug = await apiFetch(`/api/learning-hubs/slug/${encodeURIComponent(slug)}`, config);
+        const bySlug = await apiFetch(
+          `/api/learning-hubs/slug/${encodeURIComponent(slug)}?${ARTICLE_POPULATE}`,
+          config,
+        );
         if (bySlug.data) {
           return mapStrapiEntryToArticle(bySlug.data, config);
         }
@@ -598,13 +636,17 @@ export const strapiService = {
         // slug route may be unavailable on older APIs
       }
 
-      const json = await apiFetch(`/api/learning-hubs?filters[slug][$eq]=${encodeURIComponent(slug)}&populate=*`, config);
+      const json = await apiFetch(
+        `/api/learning-hubs?filters[slug][$eq]=${encodeURIComponent(slug)}&${ARTICLE_POPULATE}`,
+        config,
+      );
       if (json.data && Array.isArray(json.data) && json.data.length > 0) {
         return mapStrapiEntryToArticle(json.data[0], config);
       }
       return null;
     } catch (e) {
       console.error(`Failed fetching details for slug ${slug}, falling back to mock.`, e);
+      if (!USE_MOCK_IN_DEV) return null;
       const mock = MOCK_ARTICLES.find(a => a.slug === slug);
       return mock || null;
     }

@@ -48,10 +48,15 @@ export const ArticleCard: React.FC<ArticleCardProps> = ({
         onClick={() => onReadClick(article)}
       >
         {article.image ? (
-          <img 
-            src={article.image} 
-            alt={article.title} 
+          <img
+            src={article.image}
+            alt={article.title}
             className="card-image"
+            loading={isFeatured ? 'eager' : 'lazy'}
+            decoding="async"
+            fetchPriority={isFeatured ? 'high' : 'auto'}
+            width={isFeatured ? 640 : 320}
+            height={isFeatured ? 360 : 180}
           />
         ) : (
           <span className="fallback-category-icon">
