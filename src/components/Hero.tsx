@@ -1,4 +1,5 @@
 import React from 'react';
+import { Breadcrumbs } from './Breadcrumbs';
 import './Hero.css';
 
 interface HeroProps {
@@ -9,20 +10,12 @@ export const Hero: React.FC<HeroProps> = ({ onHomeClick }) => {
   return (
     <section className="hero-section">
       <div className="container hero-container animate-fade-in">
-        {/* Breadcrumbs */}
-        <nav className="breadcrumbs" aria-label="Breadcrumb">
-          <ol className="breadcrumb-list">
-            <li className="breadcrumb-item">
-              <button onClick={onHomeClick} className="breadcrumb-link">
-                Home
-              </button>
-            </li>
-            <li className="breadcrumb-item separator">/</li>
-            <li className="breadcrumb-item active" aria-current="page">
-              Therapy Flow Learning Hub
-            </li>
-          </ol>
-        </nav>
+        <Breadcrumbs
+          items={[
+            { label: 'Home', onClick: onHomeClick },
+            { label: 'Therapy Flow Learning Hub', current: true },
+          ]}
+        />
 
         {/* Title & Description */}
         <div className="hero-content">

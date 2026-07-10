@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { AlertCircle } from 'lucide-react';
 import { Header } from '../components/Header';
 import { Hero } from '../components/Hero';
@@ -11,6 +11,7 @@ import { strapiService } from '../services/strapi';
 import { resolveHubIndexSeo } from '../lib/seo/resolveSeo';
 import type { GlobalSiteSettings } from '../lib/seo/types';
 import type { Article } from '../types';
+import { articleMatchesBrowseFilters, buildHubBrowseUrl, type HubBrowseFilters } from '../utils/breadcrumbs';
 
 const CARDS_PER_PAGE = 8;
 
@@ -26,6 +27,7 @@ function ArticlesGridSkeleton() {
 
 export const HomePage = () => {
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   const [articles, setArticles] = useState<Article[]>([]);
   const [featuredArticle, setFeaturedArticle] = useState<Article | null>(null);
   const [globalSettings, setGlobalSettings] = useState<GlobalSiteSettings | null>(null);
@@ -34,6 +36,38 @@ export const HomePage = () => {
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [isBookingOpen, setIsBookingOpen] = useState<boolean>(false);
   const [fetchError, setFetchError] = useState<string | null>(null);
+
+  const browseFilters = useMemo<HubBrowseFilters>(() => {
+    const chapter = searchParams.get('chapter') || undefined;
+    const section = searchParams.get('section') || undefined;
+    const category = searchParams.get('category') || undefined;
+    return { chapter, section, category };
+  }, [searchParams]);
+
+  const hasBrowseFilters = Boolean(
+    browseFilters.chapter || browseFilters.section || (browseFilters.category && browseFilters.category !== 'all'),
+  );
+
+  useEffect(() => {
+    if (browseFilters.category) {
+      setActiveCategory(browseFilters.category);
+      return;
+    }
+
+    if (hasBrowseFilters) {
+      setActiveCategory('all');
+    }
+  }, [browseFilters.category, hasBrowseFilters]);
+
+  useEffect(() => {
+    if (!hasBrowseFilters) return;
+
+    const timer = window.setTimeout(() => {
+      document.getElementById('articles-main-section')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }, 150);
+
+    return () => window.clearTimeout(timer);
+  }, [hasBrowseFilters, browseFilters.chapter, browseFilters.section, browseFilters.category]);
 
   useEffect(() => {
     const loadContent = async () => {
@@ -92,10 +126,22 @@ export const HomePage = () => {
   const handleCategorySelect = (categorySlug: string) => {
     setActiveCategory(categorySlug);
     setCurrentPage(1);
+    navigate(categorySlug === 'all' ? '/' : buildHubBrowseUrl({ category: categorySlug }));
+    document.getElementById('articles-main-section')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  };
+
+  const clearBrowseFilters = () => {
+    setActiveCategory('all');
+    setCurrentPage(1);
+    navigate('/');
     document.getElementById('articles-main-section')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
   };
 
   const filteredArticles = articles.filter((article) => {
+    if (hasBrowseFilters) {
+      return articleMatchesBrowseFilters(article, browseFilters);
+    }
+
     if (activeCategory === 'all') return true;
     return (
       article.category.toLowerCase().replace(/\s+/g, '-') === activeCategory.toLowerCase() ||
@@ -104,11 +150,21 @@ export const HomePage = () => {
   });
 
   const gridArticles =
-    activeCategory === 'all'
+    activeCategory === 'all' && !hasBrowseFilters
       ? featuredArticle
         ? articles.filter((a) => a.id !== featuredArticle.id && a.slug !== featuredArticle.slug)
         : articles
       : filteredArticles;
+
+  const browseFilterLabel = useMemo(() => {
+    if (!hasBrowseFilters) return null;
+    const parts = [
+      browseFilters.chapter,
+      browseFilters.section,
+      browseFilters.category && browseFilters.category !== 'all' ? browseFilters.category : null,
+    ].filter(Boolean);
+    return parts.join(' / ');
+  }, [browseFilters, hasBrowseFilters]);
 
   const totalPages = Math.ceil(gridArticles.length / CARDS_PER_PAGE);
   const paginatedGridArticles = gridArticles.slice(
@@ -201,7 +257,7 @@ export const HomePage = () => {
       <div className="hero-featured-gradient-wrapper">
         <Hero onHomeClick={() => handleCategorySelect('all')} />
 
-        {featuredArticle && activeCategory === 'all' && (
+        {featuredArticle && activeCategory === 'all' && !hasBrowseFilters && (
           <div className="container featured-section-wrapper animate-fade-in">
             <ArticleCard article={featuredArticle} isFeatured onReadClick={handleReadArticle} />
           </div>
@@ -210,6 +266,17 @@ export const HomePage = () => {
 
       <main id="articles-main-section" className={`main-content flex-grow${isLoading ? ' main-content-loading' : ''}`}>
         <div className="container">
+          {browseFilterLabel ? (
+            <div className="browse-filter-banner">
+              <p>
+                Showing guides in <strong>{browseFilterLabel}</strong>
+              </p>
+              <button type="button" onClick={clearBrowseFilters} className="clear-filters-btn">
+                View all guides
+              </button>
+            </div>
+          ) : null}
+
           {isLoading ? (
             <ArticlesGridSkeleton />
           ) : fetchError ? (
@@ -225,8 +292,8 @@ export const HomePage = () => {
             <div className="empty-container">
               <h3>No Guides Found</h3>
               <p>We couldn't find any resources matching your selected tag.</p>
-              <button onClick={() => setActiveCategory('all')} className="clear-filters-btn">
-                Reset Filter
+              <button onClick={clearBrowseFilters} className="clear-filters-btn">
+                View all guides
               </button>
             </div>
           ) : (
@@ -238,7 +305,7 @@ export const HomePage = () => {
                   ))}
                 </div>
 
-                {activeCategory === 'all' && totalPages > 1 && (
+                {activeCategory === 'all' && !hasBrowseFilters && totalPages > 1 && (
                   <div className="pagination-container-box">
                     <div className="pagination-wrapper">
                       <button

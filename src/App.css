@@ -291,6 +291,24 @@
   margin-bottom: 24px;
 }
 
+.browse-filter-banner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 24px;
+  padding: 14px 18px;
+  border: 1px solid var(--Neutral-200);
+  border-radius: var(--Numbers-sm);
+  background: var(--Neutral-25);
+}
+
+.browse-filter-banner p {
+  margin: 0;
+  font-size: 15px;
+  color: var(--Neutral-700);
+}
+
 .retry-btn,
 .clear-filters-btn {
   background-color: var(--primary-800-p);
