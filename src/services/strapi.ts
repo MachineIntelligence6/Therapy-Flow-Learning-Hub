@@ -2,10 +2,21 @@ import type { Article, Category, RelatedLink, StrapiConfig } from '../types';
 import type { GlobalSiteSettings, StrapiSeoFields } from '../lib/seo/types';
 import { resolveCardImage } from '../lib/media';
 
-const STORAGE_KEY = 'learninghub_strapi_config';
-const DEFAULT_API_URL = import.meta.env.VITE_STRAPI_API_URL || 'http://localhost:1337';
+const STORAGE_KEY = 'learninghub_cms_config';
+const DEFAULT_API_URL =
+  import.meta.env.VITE_CMS_API_URL ||
+  import.meta.env.VITE_STRAPI_API_URL ||
+  'http://localhost:8080';
 const STRAPI_TOKEN = import.meta.env.VITE_STRAPI_API_TOKEN as string | undefined;
-const USE_MOCK_IN_DEV = !import.meta.env.PROD && import.meta.env.VITE_STRAPI_ENABLED !== 'true';
+const USE_MOCK_IN_DEV =
+  !import.meta.env.PROD &&
+  import.meta.env.VITE_CMS_ENABLED !== 'true' &&
+  import.meta.env.VITE_STRAPI_ENABLED !== 'true';
+
+const CMS_ARTICLES_PATH = '/api/v1/public/cms/learning-hubs';
+const CMS_SETTINGS_PATH = '/api/v1/public/cms/global-settings';
+const CMS_ARTICLE_SLUG_PATH = (slug: string) =>
+  `/api/v1/public/cms/learning-hubs/slug/${encodeURIComponent(slug)}`;
 
 const MOCK_ARTICLES: Article[] = [
   {
@@ -312,12 +323,6 @@ const apiFetch = async (endpoint: string, config: StrapiConfig): Promise<any> =>
   return response.json();
 };
 
-const ARTICLE_POPULATE =
-  'populate[Card_Image]=true&populate[SEO][populate]=OG_Image&populate[Content]=true&populate[Related_Links]=true';
-
-const GLOBAL_SETTINGS_POPULATE =
-  'populate[LearningHub_SEO][populate]=OG_Image&populate=Default_OG_Image&populate=Organization_Logo';
-
 // Helper to calculate reading time based on content block words count
 const calculateReadingTime = (content: any, sections: any[] | undefined): string => {
   let wordCount = 0;
@@ -494,8 +499,8 @@ const mapStrapiEntryToArticle = (item: any, config: StrapiConfig): Article => {
 
 export const strapiService = {
   getConfig(): StrapiConfig {
-    const envApiUrl = import.meta.env.VITE_STRAPI_API_URL;
-    const envEnabled = import.meta.env.VITE_STRAPI_ENABLED;
+    const envApiUrl = import.meta.env.VITE_CMS_API_URL || import.meta.env.VITE_STRAPI_API_URL;
+    const envEnabled = import.meta.env.VITE_CMS_ENABLED || import.meta.env.VITE_STRAPI_ENABLED;
 
     if (import.meta.env.PROD || envApiUrl !== undefined || envEnabled !== undefined) {
       return {
@@ -509,7 +514,7 @@ export const strapiService = {
       try {
         return JSON.parse(saved);
       } catch (e) {
-        console.error('Failed to parse Strapi config', e);
+        console.error('Failed to parse CMS config', e);
       }
     }
     return { apiUrl: DEFAULT_API_URL, isEnabled: false };
@@ -524,7 +529,7 @@ export const strapiService = {
     if (!config.isEnabled) return null;
 
     try {
-      const json = await apiFetch(`/api/global-site-settings?${GLOBAL_SETTINGS_POPULATE}`, config);
+      const json = await apiFetch(CMS_SETTINGS_PATH, config);
       return json.data || null;
     } catch (e) {
       console.error('Failed fetching global site settings', e);
@@ -534,13 +539,13 @@ export const strapiService = {
 
   async testConnection(apiUrl: string): Promise<boolean> {
     try {
-      const response = await fetch(`${apiUrl}/api/learning-hubs?pagination[pageSize]=1`, {
+      const response = await fetch(`${apiUrl}${CMS_ARTICLES_PATH}`, {
         method: 'GET',
         headers: { 'Content-Type': 'application/json' },
       });
       return response.ok;
     } catch (e) {
-      console.warn('Strapi connection test failed:', e);
+      console.warn('CMS connection test failed:', e);
       return false;
     }
   },
@@ -563,16 +568,13 @@ export const strapiService = {
     }
 
     try {
-      const json = await apiFetch(
-        `/api/learning-hubs?filters[Is_Featured][$eq]=true&${ARTICLE_POPULATE}&pagination[pageSize]=1`,
-        config,
-      );
+      const json = await apiFetch(`${CMS_ARTICLES_PATH}?featured=true`, config);
       if (json.data && Array.isArray(json.data) && json.data.length > 0) {
         return mapStrapiEntryToArticle(json.data[0], config);
       }
       return null;
     } catch (e) {
-      console.error('Failed fetching featured article from Strapi, falling back to mock.', e);
+      console.error('Failed fetching featured article from CMS, falling back to mock.', e);
       return USE_MOCK_IN_DEV && MOCK_ARTICLES.length > 0 ? MOCK_ARTICLES[0] : null;
     }
   },
@@ -584,10 +586,7 @@ export const strapiService = {
     }
 
     try {
-      const json = await apiFetch(
-        `/api/learning-hubs?${ARTICLE_POPULATE}&sort=Order:asc&pagination[pageSize]=100`,
-        config,
-      );
+      const json = await apiFetch(CMS_ARTICLES_PATH, config);
       if (json.data && Array.isArray(json.data)) {
         return json.data
           .map((item: any) => mapStrapiEntryToArticle(item, config))
@@ -595,7 +594,7 @@ export const strapiService = {
       }
       return USE_MOCK_IN_DEV ? MOCK_ARTICLES : [];
     } catch (e) {
-      console.error('Failed fetching learning hubs from Strapi, falling back to mock.', e);
+      console.error('Failed fetching learning hubs from CMS, falling back to mock.', e);
       return USE_MOCK_IN_DEV ? MOCK_ARTICLES : [];
     }
   },
@@ -609,24 +608,9 @@ export const strapiService = {
     }
 
     try {
-      try {
-        const bySlug = await apiFetch(
-          `/api/learning-hubs/slug/${encodeURIComponent(slug)}?${ARTICLE_POPULATE}`,
-          config,
-        );
-        if (bySlug.data) {
-          return mapStrapiEntryToArticle(bySlug.data, config);
-        }
-      } catch {
-        // slug route may be unavailable on older APIs
-      }
-
-      const json = await apiFetch(
-        `/api/learning-hubs?filters[slug][$eq]=${encodeURIComponent(slug)}&${ARTICLE_POPULATE}`,
-        config,
-      );
-      if (json.data && Array.isArray(json.data) && json.data.length > 0) {
-        return mapStrapiEntryToArticle(json.data[0], config);
+      const bySlug = await apiFetch(CMS_ARTICLE_SLUG_PATH(slug), config);
+      if (bySlug.data) {
+        return mapStrapiEntryToArticle(bySlug.data, config);
       }
       return null;
     } catch (e) {

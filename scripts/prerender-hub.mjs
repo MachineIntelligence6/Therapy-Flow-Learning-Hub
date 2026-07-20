@@ -7,8 +7,11 @@ const rootDir = join(__dirname, '..');
 const distDir = join(rootDir, 'dist');
 const domain = 'https://learninghub.therapyflow.pro';
 
-const STRAPI_URL = process.env.VITE_STRAPI_API_URL || 'https://strapi-admin.therapyflow.pro';
-const STRAPI_TOKEN = process.env.VITE_STRAPI_API_TOKEN;
+const CMS_URL = (
+  process.env.VITE_CMS_API_URL ||
+  process.env.VITE_STRAPI_API_URL ||
+  'http://localhost:8080'
+).replace(/\/$/, '');
 
 function escapeHtml(value) {
   return String(value)
@@ -30,16 +33,14 @@ function resolveMediaUrl(media) {
     media.url;
   if (!formatUrl) return undefined;
   if (/^https?:\/\//i.test(formatUrl)) return formatUrl;
-  const origin = STRAPI_URL.replace(/\/$/, '');
-  return `${origin}${formatUrl.startsWith('/') ? '' : '/'}${formatUrl}`;
+  return `${CMS_URL}${formatUrl.startsWith('/') ? '' : '/'}${formatUrl}`;
 }
 
-async function strapiFetch(endpoint) {
-  const url = `${STRAPI_URL}${endpoint.startsWith('/') ? '' : '/'}${endpoint}`;
+async function cmsFetch(endpoint) {
+  const url = `${CMS_URL}${endpoint.startsWith('/') ? '' : '/'}${endpoint}`;
   const headers = { Accept: 'application/json' };
-  if (STRAPI_TOKEN) headers.Authorization = `Bearer ${STRAPI_TOKEN}`;
   const res = await fetch(url, { headers });
-  if (!res.ok) throw new Error(`Strapi request failed: ${res.status} ${endpoint}`);
+  if (!res.ok) throw new Error(`CMS request failed: ${res.status} ${endpoint}`);
   return res.json();
 }
 
@@ -133,23 +134,19 @@ function writePrerenderedHtml(baseHtml, outPath, headTags) {
 
 async function main() {
   const baseHtml = readFileSync(join(distDir, 'index.html'), 'utf8');
-  const globalPopulate =
-    'populate[LearningHub_SEO][populate]=OG_Image&populate=Default_OG_Image&populate=Organization_Logo';
-  const articlePopulate =
-    'fields[0]=slug&fields[1]=title&fields[2]=Description&fields[3]=updatedAt&fields[4]=Publish_Date&populate[SEO][populate]=OG_Image&populate=Card_Image&pagination[pageSize]=100';
 
   let global = null;
   let articles = [];
 
   try {
     const [globalRes, articlesRes] = await Promise.all([
-      strapiFetch(`/api/global-site-settings?${globalPopulate}`),
-      strapiFetch(`/api/learning-hubs?${articlePopulate}`),
+      cmsFetch('/api/v1/public/cms/global-settings'),
+      cmsFetch('/api/v1/public/cms/learning-hubs'),
     ]);
     global = globalRes?.data || null;
     articles = Array.isArray(articlesRes?.data) ? articlesRes.data : [];
   } catch (error) {
-    console.warn('Hub prerender: Strapi unavailable, using fallback SEO only.', error.message);
+    console.warn('Hub prerender: CMS unavailable, using fallback SEO only.', error.message);
   }
 
   const indexSeo = resolveHubIndexSeo(global);
