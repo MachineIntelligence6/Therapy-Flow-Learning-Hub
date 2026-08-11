@@ -195,6 +195,16 @@
   padding-right: 16px;
   padding-bottom: min(55vh, 480px);
   scroll-padding-top: 24px;
+  min-width: 0;
+  box-sizing: border-box;
+}
+
+.tabs-content-panel.full-width {
+  width: 100%;
+}
+
+.tabs-content-panel.with-sidebar {
+  width: 72%;
 }
 
 /* Custom premium scrollbar for content panel */
@@ -385,15 +395,44 @@ h6.block-heading {
   transform: translateX(2px);
 }
 
-/* Mobile responsive adjustments */
+/* Mobile responsive adjustments — desktop layout unchanged above */
 @media (max-width: 768px) {
   .article-detail-container {
-    padding: 20px 0;
+    max-width: 100%;
+    width: 100%;
+    padding: 0 16px 32px;
+    box-sizing: border-box;
+    overflow-x: hidden;
+  }
+
+  .article-detail-container .article-breadcrumbs,
+  .article-detail-container .breadcrumbs {
+    margin-top: 16px !important;
+    margin-bottom: 16px !important;
+    font-size: 13px;
+    line-height: 1.4;
+    max-width: 100%;
+  }
+
+  .article-detail-container .breadcrumb-list {
+    flex-wrap: wrap;
+    gap: 4px 6px;
+    row-gap: 4px;
+  }
+
+  .article-detail-container .breadcrumb-item {
+    max-width: 100%;
+    word-break: break-word;
+  }
+
+  .article-detail-container .breadcrumb-item.active {
+    flex: 1 1 auto;
+    min-width: 0;
   }
 
   .detail-title {
-    font-size: 24px;
-    line-height: 30px;
+    font-size: 22px;
+    line-height: 1.25;
   }
 
   .detail-banner {
@@ -402,29 +441,123 @@ h6.block-heading {
 
   .detail-tabs-layout {
     flex-direction: column;
-    gap: var(--Numbers-md);
+    gap: 16px;
+    margin-bottom: 24px;
+    min-height: 0;
+    width: 100%;
+    max-width: 100%;
   }
 
   .tabs-sidebar {
     width: 100%;
-    border-right: none;
-    border-bottom: 1px solid var(--border-color);
-    padding-right: 0;
-    padding-bottom: var(--Numbers-md);
-    flex-direction: row;
-    overflow-x: auto;
-    white-space: nowrap;
-    -webkit-overflow-scrolling: touch;
+    max-width: 100%;
+    position: static;
+    top: auto;
+    height: auto;
+    align-self: stretch;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    gap: 6px;
+    overflow: visible;
+    overflow-x: hidden;
+    white-space: normal;
+    padding: 12px;
+    border: 1px solid var(--Neutral-200, #e2e8f0);
+    border-radius: 12px;
+    border-bottom: 1px solid var(--Neutral-200, #e2e8f0);
+    box-shadow: none;
+    box-sizing: border-box;
   }
 
   .sidebar-tab-btn {
-    width: auto;
-    padding: 8px 16px;
-    font-size: 13px;
+    width: 100%;
+    max-width: 100%;
+    padding: 12px 14px;
+    font-size: 14px;
+    line-height: 1.35;
+    white-space: normal;
+    text-align: left;
+    box-sizing: border-box;
   }
 
-  .tabs-content-panel {
+  .tabs-content-panel,
+  .tabs-content-panel.with-sidebar,
+  .tabs-content-panel.full-width {
     width: 100%;
+    max-width: 100%;
+    min-height: 0;
+    max-height: none;
+    overflow: visible;
+    overflow-x: hidden;
+    padding-right: 0;
+    padding-bottom: 24px;
+    box-sizing: border-box;
+  }
+
+  .section-body-blocks {
+    font-size: 15px;
+    line-height: 1.55;
+    max-width: 100%;
+    overflow-wrap: anywhere;
+    word-break: break-word;
+  }
+
+  .section-body-blocks p,
+  .section-body-blocks li,
+  .detail-body p {
+    max-width: 100%;
+    overflow-wrap: anywhere;
+  }
+
+  .section-body-blocks img,
+  .detail-body img,
+  .block-image,
+  .article-content-blocks img {
+    max-width: 100% !important;
+    width: 100%;
+    height: auto !important;
+    display: block;
+  }
+
+  .article-video,
+  .article-video-aspect,
+  .article-video video {
+    max-width: 100%;
+    width: 100%;
+  }
+
+  h2.block-heading {
+    font-size: 18px;
+    margin-top: 24px;
+    word-break: break-word;
+  }
+
+  h3.block-heading {
+    font-size: 16px;
+    margin-top: 20px;
+  }
+
+  h4.block-heading {
+    font-size: 14px;
+  }
+
+  .block-ul,
+  .block-ol {
+    margin-left: 16px;
+    padding-left: 4px;
+  }
+
+  .related-links-panel {
+    margin-top: 28px;
+    padding: 16px;
+    box-sizing: border-box;
+    max-width: 100%;
+  }
+
+  .related-link-anchor,
+  .related-link-btn {
+    white-space: normal;
+    word-break: break-word;
   }
 
   .detail-cta-box {
@@ -436,6 +569,11 @@ h6.block-heading {
   .cta-box-button {
     width: 100%;
     justify-content: center;
+  }
+
+  .section-heading-title {
+    font-size: 18px;
+    word-break: break-word;
   }
 }
 

@@ -204,8 +204,7 @@ export const ArticleDetailView: React.FC<ArticleDetailViewProps> = ({
 
           <div
             ref={contentPanelRef}
-            className="tabs-content-panel"
-            style={{ width: hasSidebar ? '72%' : '100%' }}
+            className={`tabs-content-panel${hasSidebar ? ' with-sidebar' : ' full-width'}`}
           >
             {contentBlocks ? (
               <div className="detail-body rich-content-body" style={{ padding: 0 }}>

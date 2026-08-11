@@ -3,12 +3,14 @@
   border-radius: 0.75rem;
   overflow: hidden;
   width: 100%;
+  max-width: 100%;
 }
 
 .article-video-aspect {
   position: relative;
   aspect-ratio: 16 / 9;
   width: 100%;
+  max-width: 100%;
 }
 
 .article-video iframe {
@@ -22,6 +24,8 @@
 
 .article-video video {
   width: 100%;
+  max-width: 100%;
+  height: auto;
   display: block;
   border-radius: 0.75rem;
 }
@@ -32,6 +36,9 @@
 
 .article-content-blocks {
   width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
 }
 
 .block-code {
@@ -41,12 +48,28 @@
   overflow-x: auto;
   margin: 1.25rem 0;
   font-size: 0.9rem;
+  max-width: 100%;
 }
 
 .block-image {
   max-width: 100%;
+  width: 100%;
   height: auto;
   border-radius: 0.75rem;
   margin: 1.5rem 0;
   display: block;
+}
+
+@media (max-width: 768px) {
+  .article-content-blocks {
+    overflow-x: hidden;
+  }
+
+  .article-video {
+    margin: 1.25rem 0;
+  }
+
+  .block-image {
+    margin: 1rem 0;
+  }
 }
