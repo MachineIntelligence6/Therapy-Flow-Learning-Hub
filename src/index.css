@@ -63,7 +63,8 @@
 html,
 body {
   width: 100%;
-  overflow-x: hidden;
+  /* Avoid overflow-x: hidden — it breaks position: sticky on the curriculum rail */
+  overflow-x: clip;
 }
 
 body {

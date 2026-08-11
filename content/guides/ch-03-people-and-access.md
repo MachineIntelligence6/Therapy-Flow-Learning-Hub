@@ -1,12 +1,12 @@
-# Chapter 3 — People & Access (Admin)
+# Chapter 3 - People & Access (Admin)
 
 **Slug:** `ch-03-people-and-access`  
 **Audience:** Admin  
 **Order:** 3000
 
-Create roles, users with passwords, professional profiles/schedules, supervisors, and duplicate review.
+Create roles, create users with passwords, finish professional profiles and schedules, assign supervisors, and review duplicates.
 
-**Primary nav:** Sidebar → **User & Access**
+**Primary path:** Sidebar → **User & Access**
 
 | Item | Route |
 |------|--------|
@@ -18,84 +18,67 @@ Create roles, users with passwords, professional profiles/schedules, supervisors
 
 ## 3.1 Roles
 
-### Create and manage roles & permissions
+### Create and manage roles
 
 1. Open **Role Management**
-2. Optional **Search role...**
+2. Use **Search role...** if the list is long
 3. **Create Role** → modal **Create New Role**
-4. Fields:
-   - **Role Name**
-   - **Display Name**
-   - Role description
-   - **Permissions** (use **Select all** if needed)
-5. **Create Role**
-6. Edit → **Update Role**; **Delete** → confirm **Delete role?**
+4. Fill **Role Name**, **Display Name**, description, and **Permissions** (**Select all** if needed)
+5. Submit **Create Role**
+6. Edit with **Update Role**, or **Delete** and confirm **Delete role?**
 
-Create Therapist (and custom staff) roles **before** bulk user create so **Role** dropdown is ready on Add User.
+Create Therapist and custom staff roles before bulk user create so the **Role** dropdown is ready on **Add User**.
 
 ---
 
 ## 3.2 Users and professional profiles
 
-### Create a therapist or staff user with password
+### Create a therapist or staff user
 
-1. **User Profiles** tab (not Supervisor Assignments)
+1. **User Profiles** (not Supervisor Assignments)
 2. **Add New User**
-3. Fields in order:
-   - **Full Name** *  
-   - **Email** *  
-   - **Username** *  
-   - **Phone**  
-   - **Role** * (searchable)  
-   - **Password** *  
+3. Fill in order: **Full Name**, **Email**, **Username**, **Phone**, **Role**, **Password**
 4. **Add User** → toast **User added successfully.**
-5. User signs in at `/auth/staff/login` (first-password activation if required)
+5. User signs in at `/auth/staff/login` and completes first password / MFA if required
 
-There is no email-only invite without password in the current UI.
+There is no email-only invite without a password in the current UI.
 
-### Edit, activate, deactivate, or delete a user
+### Edit, activate, deactivate, or delete
 
-Row ⋯ menu:
+On the user row ⋯ menu:
 
 - **Edit Basic Info** → Full Name, Email, Username, Phone, Role → **Save Changes**
 - **Professional Details**
 - **Deactivate** / **Activate**
 - **Delete** (confirm)
 
-### Complete professional details (Admin)
+### Professional Details (Admin)
 
-⋯ → **Professional Details** sidebar:
+⋯ → **Professional Details**
 
-**License** · **Specializations** · **Background** · **Schedule** · **Emergency Contact**
+Sections: **License**, **Specializations**, **Background**, **Schedule**, **Emergency Contact**
 
-| Section | Example fields |
-|---------|----------------|
-| **License** | License Number, License Type, License State, License Expiration |
-| **Specializations** | Specializations, Languages, Years of Experience, Clinical Experience Summary |
-| **Background** | Research Background, Supervisory Experience, Career Objectives |
-| **Emergency Contact** | Name, Number, Email, Relation |
+Use **Save Profile** or section **Save changes** as shown. Admin does not show the therapist-only **Zoom Integration** or in-app **Password** blocks (those are on therapist **My Profile**).
 
-**Save Profile** / section **Save changes** as shown. Admin modal does **not** include therapist-only **Zoom Integration** / **Password** (therapist **My Profile** does).
-
-### Set therapist schedule from Admin
+### Therapist schedule from Admin
 
 1. Professional Details → **Schedule**
-2. **Time Zone** (required)
-3. **Select Rooms** (in-person rooms)
-4. **Working hours**: enable days, start/end slots; configure In-person / Virtual modes if shown
-5. Optional: **Max Clients / day**, **Session Duration (min)**
+2. Set **Time Zone** (required)
+3. **Select Rooms** for in-person rooms
+4. Set **Working hours** (days, start/end; in-person / virtual modes if shown)
+5. Optional: max clients per day, session duration
 6. **Save Profile**
 
 ### Assign a supervisor
 
-1. Tab **Supervisor Assignments**
-2. **Assign Supervisor** → select supervisor + assignee → **Assign**
+1. Open **Supervisor Assignments**
+2. **Assign Supervisor** → pick supervisor and assignee → **Assign**
 
-### Run duplicate detection
+### Duplicate detection
 
-1. **Duplicate Detection**
+1. Open **Duplicate Detection**
 2. **Refresh Scan**
-3. **View full record** when needed
+3. Open **View full record** when needed
 4. **Keep this** or **Mark as Duplicate** (confirm)
 
 ---

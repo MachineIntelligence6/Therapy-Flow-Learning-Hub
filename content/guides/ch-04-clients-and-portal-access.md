@@ -1,87 +1,72 @@
-# Chapter 4 — Clients & Portal Access
+# Chapter 4 - Clients & Portal Access
 
 **Slug:** `ch-04-clients-and-portal-access`  
-**Audience:** Admin (Therapist overlap on create/profile under `/therapist/clients`)  
+**Audience:** Admin (Therapist can create and open clients under `/therapist/clients`)  
 **Order:** 4000
 
-Create patient records, decide portal access, and work the full client profile tabs.
+Create patient records, set portal access, and work the full client profile.
 
-**Primary nav:** Sidebar → **Clients** → `/admin/clients`
+**Primary path:** Sidebar → **Clients** → `/admin/clients`
 
 ---
 
-## 4.1 Create clients and portal access decisions
+## 4.1 Create clients and portal access
 
-### Create a client / patient (Add New Client)
+### Add New Client
 
 1. **Clients** → **Add Client**
 2. Modal **Add New Client**
-3. Tabs order: **Personal → Address → Referral → Employment → Clinical**
-4. Footer: **Cancel** · **Next** · last tab **Create Client**  
-   Edit mode: **Save Changes**. **Consents** appears only on **Edit Client**.
+3. Tabs: **Personal → Address → Referral → Employment → Clinical**
+4. Footer: **Cancel**, **Next**, and on the last tab **Create Client**  
+   Edit mode uses **Save Changes**. **Consents** appears only on **Edit Client**.
 
-#### Personal — section **Personal Information**
+#### Personal Information
 
-| Field | Required |
-|-------|----------|
-| **Full Name** | Yes |
-| **Email** | Yes |
-| **Phone** | No |
-| **Date of Birth** | No |
-| **Gender** | No |
-| **Marital Status** | No |
-| **Pronouns** | No |
-| **Language** | No |
+Required: **Full Name**, **Email**  
+Optional: **Phone**, **Date of Birth**, **Gender**, **Marital Status**, **Pronouns**, **Language**
 
-**Immediate Setup**
+##### Immediate Setup
 
-| Control | Meaning |
-|---------|---------|
-| **Enable Portal Access** | ON = portal + activation email path; OFF = clinic-only until later |
-| **Email Notifications** | Email updates when ON |
+- **Enable Portal Access** — ON sends the portal path and activation email; OFF keeps clinic-only until later
+- **Email Notifications** — email updates when ON
 
-#### Address — **Address Information**
+#### Address Information
 
-**Street Address 1** · **Street Address 2** · **City** · **State/Province** · **ZIP / Postal Code** · **Country**  
+**Street Address 1**, **Street Address 2**, **City**, **State/Province**, **ZIP / Postal Code**, **Country**  
+Optional **Emergency Contact**: name, phone, relationship
 
-**Emergency Contact** checkbox → **Contact Name** · **Contact Phone** · **Relationship to Client**
+#### Referral & Case Information
 
-#### Referral — **Referral & Case Information**
+**Start Date**, **Referral Date**, **Referrer Name**, **Reference Number**, **Client Source**, **Referral Notes**
 
-**Start Date** · **Referral Date** · **Referrer Name** · **Reference Number** · **Client Source** · **Referral Notes**
+#### Employment & Socioeconomic
 
-#### Employment — **Employment & Socioeconomic**
+**Employment Status**, **Education Level**, **Number of Dependents**
 
-**Employment Status** · **Education Level** · **Number of Dependents**
+#### Client Stage & Service Type
 
-#### Clinical — **Client Stage & Service Type**
+**Status**, **Client Type**, **Client stage**, **Service Type**, **Service Frequency**, **Treatment Modalality**, **Assigned Therapist** (recommended)
 
-**Status** · **Client Type** · **Client stage** · **Service Type** · **Service Frequency** · **Treatment Modality** · **Assigned Therapist** (strongly recommended)
+**Needs Follow-up** fields when shown. **Insurance Information** when enabled. Then **Create Client** → toast **Client created successfully.**
 
-**Needs Follow-up:** Priority · Due Date · notes  
+Minimum viable record: Full Name + Email; assign a therapist when you can; only leave Portal ON with a correct email.
 
-**Insurance Information** when enabled: Provider · Type · Policy Number · Group Number · Copay · Deductible · Insurance Phone  
+### Portal choice at create time
 
-General notes field → click **Create Client** → toast **Client created successfully.** Stay on list; open row for profile.
-
-**Minimum:** Full Name + Email · prefer Assigned Therapist · Portal ON only with correct email.
-
-### Choose portal at create time
-
-- **Yes:** Personal → **Enable Portal Access** ON + valid **Email**  
-- **No:** leave OFF — enable later from Overview if needed  
+- Portal yes: **Enable Portal Access** ON with a valid **Email**
+- Portal no: leave OFF, enable later from Overview if needed
 
 ### Enable, resend, or disable portal later
 
-1. Open client → **Overview** → **Portal Access Management**
-2. Review **Portal Email**
-3. Actions: **Enable Portal Access** · **Resend Activation Email** · **Disable Portal Access** (confirm)
+1. Open the client → **Overview** → **Portal Access Management**
+2. Check **Portal Email**
+3. Use **Enable Portal Access**, **Resend Activation Email**, or **Disable Portal Access** (confirm)
 
-Portal features when on: appointments, book, invoices, documents upload.
+Portal features when on: appointments, booking, invoices, document upload.
 
-### Edit, close, or delete a client file
+### Edit, close, or delete a client
 
-Overview header:
+On Overview:
 
 - **Edit** (pencil) → **Edit Client** → **Save Changes**
 - **Close File** / **Activate File**
@@ -91,64 +76,48 @@ Overview header:
 
 1. `/admin/clients` → search and **Filters**
 2. Typical filters: **Status**, **Stage**, **Assigned Therapist**, **Client Type**
-3. **Apply filters** · **Clear all** · use chips to remove one filter
+3. **Apply filters**, **Clear all**, or remove a single filter chip
 
 ---
 
-## 4.2 Working inside the client profile tabs
+## 4.2 Client profile tabs
 
-**Profile tabs (exact labels)**
+Exact tab labels:
 
-1. **Overview**  
-2. **Sessions**  
-3. **Assessments**  
-4. **Reports**  
-5. **Forms & Docs**  
-6. **Billing**  
-7. **Tasks**  
-8. **Checklists**  
+1. **Overview**
+2. **Sessions**
+3. **Assessments**
+4. **Reports**
+5. **Forms & Docs**
+6. **Billing**
+7. **Tasks**
+8. **Checklists**
 9. **History**
 
-### Sessions tab
+### Sessions
 
-1. Open client → **Sessions**
-2. Review list / infinite scroll as available
-3. **+ Schedule Session** / **Schedule Session** → **Schedule New Session** modal (Chapter 5)
-4. Session card ⋮: edit, status marks, notes, recording, invoice (as status allows)
+Open **Sessions**. Use **Schedule Session** / **+ Schedule Session** for **Schedule New Session** (see Chapter 5). Session card ⋮ covers edit, status, notes, recording, invoice when status allows.
 
 ### Assessments
 
-1. **Assessments** → assign / open assessment flow for the client
-2. Confirm assignment appears and status updates
+Open **Assessments**, assign or open the assessment flow, and confirm status updates.
 
 ### Forms & Docs
 
-1. **Forms & Docs**
-2. Assign clinical forms; upload documents with **Upload Document** type fields as shown
-3. Track completion / review status
+Open **Forms & Docs**. Assign clinical forms. Upload with **Upload Document** and track completion.
 
 ### Checklists
 
-1. **Checklists**
-2. Assign process checklist template
-3. Track items to completion
+Open **Checklists**, assign a process checklist template, and track items.
 
-### Tasks from profile
+### Tasks
 
-1. **Tasks**
-2. **Add task** / create task → fill form → **Create task**
-3. Edit / delete with confirmations as shown
+Open **Tasks**, **Add task** → **Create task**, then edit or delete as shown.
 
-### History / Communications / Email History
+### History
 
-1. **History**
-2. Sub-tabs: communications & **Email History** (labels as shown)
-3. **Add Note** → **Add note**; edit **Save**; delete **Delete Note**
-4. Search/filter by type (Call/Email/Note) and dates when available
+Open **History**. Use communications / **Email History** as labeled. **Add Note**, edit **Save**, delete **Delete Note**. Filter by type and dates when available.
 
-### Billing tab on client
+### Billing
 
-Review invoices tied to this client; use **Billings** workspace (Chapter 6) for payments and actions.
-
----
-Product: `/admin/clients`
+Review invoices for this client. Use the main **Billings** workspace (Chapter 6) for pay, email, download, and status.

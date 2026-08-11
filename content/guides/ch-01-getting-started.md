@@ -1,10 +1,10 @@
-# Chapter 1 — Getting Started
+# Chapter 1 - Getting Started
 
 **Slug:** `ch-01-getting-started`  
 **Audience:** Everyone (Admin, Therapist, Staff, Client)  
 **Order:** 1000
 
-Everyone starts here: use the correct login portal, finish first password setup, and recover access if locked out.
+Use the right login portal, finish first access setup, then open SmartHub.
 
 ---
 
@@ -16,48 +16,51 @@ Everyone starts here: use the correct login portal, finish first password setup,
 |-----|-----------|-------------|
 | Organisation Admin | `/auth/staff/login` | `/admin/dashboard` |
 | Therapist | `/auth/staff/login` | `/therapist/dashboard` |
-| Custom staff | `/auth/staff/login` | First allowed `/staff/...` page |
+| Custom staff | `/auth/staff/login` | first allowed `/staff/...` page |
 | Client / patient | `/auth/login` | `/user/appointments` |
 
-**Rules**
+Rules:
 
-- Staff, therapists, and admins always use **`/auth/staff/login`**
-- Clients always use **`/auth/login`**
+- Staff, therapists, and admins always use **Staff** login: `/auth/staff/login`
+- Clients always use **Client** login: `/auth/login`
 - Do not mix the two portals
 
-### First login — set your password (staff / admin / therapist)
+### First login for staff, admin, or therapist
 
 1. Open `/auth/staff/login`
-2. Enter **email** + temporary **password** from your admin
+2. Enter **email** and temporary **password** from your clinic
 3. Click **Sign In**
-4. If required, open **Set your password** at `/auth/staff/activate-your-account`
-5. Enter new password + confirm → **Set password** (button may show **Saving...**)
-6. Success page `/auth/staff/password-reset-success` → **Back to login**
-7. Sign in again with the new password
+4. If asked to set a password, complete **Set your password** at `/auth/staff/activate-your-account`
+5. Enter new password and confirm, then submit **Set password**
+6. If **Protect your account** (MFA) appears:
+   - Choose a method (Email is the usual default)
+   - Enter the code
+   - Save recovery codes (Copy or Download)
+   - Use **I saved my codes - continue to portal** (or **Continue to portal**) when offered
+7. You should land in SmartHub. If you only finished password setup without a full session, sign in again at `/auth/staff/login`
 
-| Situation | Correct path |
-|-----------|--------------|
-| First login / must change password | `/auth/staff/activate-your-account` |
+| Situation | Path |
+|-----------|------|
+| Must change password on first use | `/auth/staff/activate-your-account` |
 | Forgot password later | `/auth/staff/forgot-password` |
 
-### Forgot password (Admin / Therapist / Staff)
+### Forgot password (Admin, Therapist, Staff)
 
-1. `/auth/staff/forgot-password` (**Reset Password**)
-2. Enter staff email → continue
-3. `/auth/staff/check-email` → open email
-4. Link opens `/auth/staff/set-new-password?token=...`
-5. Set + confirm password → success → **Back to login** → `/auth/staff/login`
+1. Open `/auth/staff/forgot-password` (**Reset Password**)
+2. Enter staff email and continue
+3. Check email, then open the reset link (opens `/auth/staff/set-new-password?token=...`)
+4. Set and confirm password, then **Back to login** and sign in at `/auth/staff/login`
 
-If no email: check spam; confirm user is **Active** under **User & Access → User Profiles**.
+If no email arrives: check spam, then ask Admin to confirm the user is **Active** under **User & Access → User Profiles**.
 
 ### Forgot password (Client)
 
-1. `/auth/forgot-password`
-2. Enter portal email → `/auth/check-email`
-3. Link: `/auth/set-new-password?token=...`
-4. Set password → `/auth/login`
+1. Open `/auth/forgot-password`
+2. Enter portal email
+3. Open the email link (`/auth/set-new-password?token=...`)
+4. Set password, then sign in at `/auth/login`
 
-If it fails: clinic must have **Enable Portal Access** ON; use client **Overview → Portal Access Management → Resend Activation Email** if never activated.
+If it fails: Portal access must be ON for that client. Clinic: open the client **Overview → Portal Access Management** and **Resend Activation Email** if they never activated.
 
 ---
-Product logins: `/auth/staff/login` · `/auth/login`
+Product: `/auth/staff/login` · `/auth/login`

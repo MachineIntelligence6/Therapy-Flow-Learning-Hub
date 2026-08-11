@@ -23,6 +23,7 @@ export const ArticlePage = () => {
   const { slug } = useParams<{ slug: string }>();
   const navigate = useNavigate();
   const [article, setArticle] = useState<Article | null>(null);
+  const [chapters, setChapters] = useState<Article[]>([]);
   const [globalSettings, setGlobalSettings] = useState<GlobalSiteSettings | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [notFound, setNotFound] = useState(false);
@@ -35,8 +36,12 @@ export const ArticlePage = () => {
     setIsLoading(true);
     setNotFound(false);
 
-    Promise.all([strapiService.getArticleBySlug(slug), strapiService.getGlobalSiteSettings()])
-      .then(([loadedArticle, global]) => {
+    Promise.all([
+      strapiService.getArticleBySlug(slug),
+      strapiService.getGlobalSiteSettings(),
+      strapiService.getArticles(),
+    ])
+      .then(([loadedArticle, global, list]) => {
         if (!active) return;
         if (!loadedArticle) {
           setNotFound(true);
@@ -45,6 +50,7 @@ export const ArticlePage = () => {
           setArticle(loadedArticle);
         }
         setGlobalSettings(global);
+        setChapters(list);
       })
       .catch(() => {
         if (active) setNotFound(true);
@@ -103,6 +109,7 @@ export const ArticlePage = () => {
       >
         <ArticleDetailView
           article={article}
+          chapters={chapters}
           onClose={() => navigate('/')}
           onSelectArticle={(next) => navigate(`/${next.slug}`)}
         />

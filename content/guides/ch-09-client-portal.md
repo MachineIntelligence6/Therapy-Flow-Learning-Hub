@@ -1,4 +1,4 @@
-# Chapter 9 — Client Portal
+# Chapter 9 - Client Portal
 
 **Slug:** `ch-09-client-portal`  
 **Audience:** Client  
@@ -16,93 +16,94 @@ Activate access, book and review sessions, manage profile, documents, forms, and
 | **Documents** | `/user/documents` |
 | **Clinical Forms** | `/user/clinical-forms` |
 
-Login after activation: `/auth/login` only (never staff login).
+After activation, login is `/auth/login` only (never staff login).
 
 ---
 
-## 9.1 Activate & sign in
+## 9.1 Activate and sign in
 
 ### Activate from email
 
-**Prerequisites:** Clinic turned **Enable Portal Access** ON; activation email received (or resent).
+Clinic must have **Enable Portal Access** ON, and you need the activation email (or a resend).
 
-1. Open link `/portal/activate/:token`
-2. Page **Activate Your Account**
-3. Password + confirm → **Activate account** (**Activating...**)
-4. Redirect to `/user/appointments`
+1. Open `/portal/activate/:token`
+2. Complete **Activate Your Account**
+3. Password and confirm → **Activate account**
+4. You should land on `/user/appointments`
 
-Invalid link → clinic **Resend Activation Email** from Overview.
+Invalid link: clinic **Resend Activation Email** from client **Overview**.
 
 ### Sign in after activation
 
 1. `/auth/login`
-2. Email + password
-3. Land `/user/appointments`
-4. Avatar: **My Profile** · **Privacy Settings**
+2. Email and password
+3. Land on `/user/appointments`
+4. Avatar menu: **My Profile**, **Privacy Settings**
+
+First-time security may show MFA and recovery codes. Save the codes, then continue into the portal.
 
 Forgotten password: `/auth/forgot-password` (Chapter 1).
 
 ---
 
-## 9.2 Book / review appointments
+## 9.2 Book and review appointments
 
 ### Book an appointment
 
-1. **Appointments** `/user/appointments`
-2. Mode: **In person** or **Virtual Visit**
-3. **Select Date & Time** → future date + slot
-4. **Choose the type of service you need** → **Select a service**
+1. **Appointments** → `/user/appointments`
+2. Choose **In person** or **Virtual Visit**
+3. **Select Date & Time** (future date and slot)
+4. Choose service under the on-screen service prompt → **Select a service**
 5. **Next**
-6. Modal **Confirm Your Appointment**: Name · Date & Time · Meeting Type (**Virtual** / **In-Person**) · Service · Price
-7. **Confirm Booking** → **Appointment Confirmed** / **You're all set!** → **Done**
+6. Confirm modal: name, date and time, meeting type (**Virtual** / **In-Person**), service, price
+7. **Confirm Booking** → confirmation screen → **Done**
 
-List: **Upcoming** · **Previous** · search as shown.  
-Not available to clients today: cancel from list / join Zoom from this page.
+List filters: **Upcoming**, **Previous**, plus search as shown.
 
 ### Booked sessions and rating
 
-1. **Booked Sessions** `/user/booked-sessions`
+1. **Booked Sessions** → `/user/booked-sessions`
 2. Search: **Search by service, therapist, or location...**
-3. Optional status filter (API-backed when deployed)
-4. Open detail `/user/booked-sessions/:sessionId` → **Back to booked sessions**
+3. Status filter when available
+4. Detail: `/user/booked-sessions/:sessionId` → **Back to booked sessions**
 5. Completed session: **Rate session** / **Rate this session**
-6. Modal **Rate your session**: **Rating (0–10)** · **Comment** → **Submit rating**
+6. Modal **Rate your session**: **Rating (0-10)**, **Comment** → **Submit rating**
 
 ---
 
-## 9.3 Profile, documents, forms, payments
+## 9.3 Profile, documents, forms, pay
 
 ### My Profile and Privacy
 
-1. Avatar → **My Profile** `/user/my-profile`
-2. Read-only: **Full Name** · **Client ID** · **Email** · **Phone**
-3. **Upload new picture** (JPEG/PNG/GIF/WebP size limits)
+1. Avatar → **My Profile** (`/user/my-profile`)
+2. Read-only basics: **Full Name**, **Client ID**, **Email**, **Phone**
+3. **Upload new picture** (JPEG/PNG/GIF/WebP within size limits)
 4. **Timezone** (search **Search timezone...**) → **Save timezone**
-5. Avatar → **Privacy Settings** `/user/privacy-settings`
+5. Avatar → **Privacy Settings** (`/user/privacy-settings`)
 
 ### Documents
 
-1. **Documents** → heading **Uploaded Documents**
-2. **Upload Document** → modal **Upload Document** → file + metadata → **Upload Document**
-3. Preview / download from table as shown
+1. **Documents** → **Uploaded Documents**
+2. **Upload Document** → file and metadata → **Upload Document**
+3. Preview or download from the table as shown
 
 ### Clinical forms
 
 1. **Clinical Forms**
-2. Search / status filter
+2. Search or status filter
 3. Card **Start** / **Continue** / **View** → `/user/clinical-forms/:formId`
-4. Fill fields + signature when required
-5. **Submit Form** (**Submitting...**)
+4. Fill fields and signature when required
+5. **Submit Form**
 
 ### Pay an invoice
 
-1. **Invoices** `/user/invoices`
+1. **Invoices** → `/user/invoices`
 2. **Pay now** → Stripe Checkout
-3. Return `?payment=success` → toast **Payment completed successfully.**
-4. Cancel Checkout may show **Payment was cancelled.**
-5. **Receipt** download when available  
+3. Success return shows a completed payment toast
+4. Cancelled checkout can show a cancelled message
+5. **Receipt** download when available
 
-Requires clinic **Payment Integration** (Stripe Connect; see [Payments & Subscription](./ch-02-payments-and-subscription.md)) and a payable invoice.
+Requires clinic **Payment Integration** under **System → Payments & Subscription** (see Chapter 2 sub-chapter) and a payable invoice.
 
 ---
 Product: `/user/*`

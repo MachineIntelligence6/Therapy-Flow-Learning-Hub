@@ -1,0 +1,210 @@
+.hub-eyebrow {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--primary-700-p);
+  margin-bottom: 8px;
+}
+
+.hub-home {
+  width: 100%;
+}
+
+.hub-home-course {
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+  padding: 32px 0 48px;
+}
+
+.course-continue-panel {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 32px;
+  align-items: center;
+  padding: 32px 36px;
+  background:
+    linear-gradient(135deg, var(--primary-50-p) 0%, var(--bg-hero) 55%, var(--Neutral-50) 100%);
+  border: 1px solid var(--Neutral-200);
+  border-radius: 16px;
+}
+
+.course-continue-title {
+  font-size: clamp(28px, 4vw, 36px);
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  color: var(--Neutral-950);
+  line-height: 1.15;
+  margin-bottom: 8px;
+}
+
+.course-continue-subtitle {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--primary-800-p);
+  margin-bottom: 8px;
+}
+
+.course-continue-desc {
+  font-size: 15px;
+  color: var(--Neutral-600);
+  max-width: 48ch;
+  margin-bottom: 20px;
+  line-height: 1.55;
+}
+
+.course-continue-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 20px;
+  border-radius: 10px;
+  background: var(--primary-800-p);
+  color: var(--Neutral-25);
+  font-weight: 700;
+  font-size: 14px;
+}
+
+.course-continue-cta:hover {
+  background: var(--primary-900-p);
+}
+
+.course-continue-progress {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+.hub-progress-ring-track {
+  stroke: var(--Neutral-200);
+}
+
+.hub-progress-ring-value {
+  stroke: var(--primary-800-p);
+  transition: stroke-dashoffset 0.4s ease;
+}
+
+.hub-progress-ring-label {
+  font-size: 16px;
+  font-weight: 800;
+  fill: var(--Neutral-950);
+  font-family: var(--font-sans);
+}
+
+.course-progress-caption {
+  font-size: 13px;
+  color: var(--Neutral-600);
+  text-align: center;
+  white-space: nowrap;
+}
+
+.course-modules-header {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.course-modules-header h2 {
+  font-size: 22px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: var(--Neutral-950);
+}
+
+.course-progress-bar {
+  height: 6px;
+  background: var(--Neutral-100);
+  border-radius: 999px;
+  overflow: hidden;
+  border: 1px solid var(--Neutral-200);
+}
+
+.course-progress-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--primary-700-p), var(--primary-800-p));
+  border-radius: 999px;
+  transition: width 0.35s ease;
+}
+
+.course-module-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 16px;
+}
+
+.course-module-card {
+  text-align: left;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 6px;
+  padding: 18px 18px 20px;
+  background: var(--Neutral-25);
+  border: 1px solid var(--Neutral-200);
+  border-radius: 12px;
+  position: relative;
+  min-height: 140px;
+  transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+.course-module-card:hover {
+  border-color: var(--primary-700-p);
+  box-shadow: var(--shadow-md);
+}
+
+.course-module-card.is-continue {
+  border-color: var(--primary-800-p);
+  box-shadow: var(--shadow-sm);
+}
+
+.course-module-card.is-complete {
+  background: var(--Neutral-50);
+}
+
+.course-module-index {
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  color: var(--Neutral-400);
+}
+
+.course-module-status {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  color: var(--Neutral-300);
+}
+
+.course-module-card.is-complete .course-module-status {
+  color: var(--primary-800-p);
+}
+
+.course-module-title {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--Neutral-950);
+  line-height: 1.35;
+  padding-right: 28px;
+}
+
+.course-module-meta {
+  font-size: 13px;
+  color: var(--Neutral-500);
+  margin-top: auto;
+}
+
+@media (max-width: 900px) {
+  .course-continue-panel {
+    grid-template-columns: 1fr;
+    padding: 24px;
+  }
+
+  .course-continue-progress {
+    align-items: flex-start;
+    flex-direction: row;
+    gap: 16px;
+  }
+}

@@ -1,16 +1,18 @@
-# Chapter 6 — Billing & Payments
+# Chapter 6 - Billing & Payments
 
 **Slug:** `ch-06-billing-and-payments`  
 **Audience:** Admin (Therapist with access: `/therapist/billings`)  
 **Order:** 6000
 
-Operate clinic invoice records: search, filter, pay, email, download, discount, and status.
+Run clinic invoice records: search, filter, record payments, email, download, discount, and status.
+
+**Path:** Sidebar → **Billings** → `/admin/billings`
+
+Online client **Pay now** depends on Stripe Connect under **System → Payments & Subscription**, not this workspace alone.
 
 ---
 
 ## 6.1 Billings workspace (Admin)
-
-**Path:** Sidebar → **Billings** → `/admin/billings`
 
 ### Overview cards
 
@@ -19,10 +21,9 @@ Operate clinic invoice records: search, filter, pay, email, download, discount, 
 - **Active Clients**
 - **Total Records**
 
-### Table: **Billing Records**
+### Table: Billing Records
 
-**Search:** client names (placeholder as shown)  
-**Filters** →
+Use search on client names. Open **Filters** for:
 
 | Filter |
 |--------|
@@ -31,33 +32,34 @@ Operate clinic invoice records: search, filter, pay, email, download, discount, 
 | **Payment Method** |
 | **Client Type** |
 | **Session Type** |
-| **Filter by Date** → **Start Date** · **End Date** |
+| **Filter by Date** (**Start Date**, **End Date**) |
 
 **Clear all** · **Apply filters**
 
-**Columns:** Client · Service · Therapist · Date · Amount · Paid · Status · Actions
+Typical columns: Client, Service, Therapist, Date, Amount, Paid, Status, Actions.
 
 ### Record a payment
 
 1. Row **Pay now**
 2. Modal **Record Payment**
-3. Fields: **Paid By** · **Amount received ($)** · **Date received** · **Payment Method** · **Reference Number** · notes
+3. **Paid By**, **Amount received ($)**, **Date received**, **Payment Method**, **Reference Number**, notes
 4. **Record Payment** (or **Cancel**)
 
-### Row actions
+### Other row actions
 
-- **Pay now** · **Preview**
-- ⋮ **Email Invoice** · **Preview Invoice** · **Download Invoice**
-- **Apply Discount** → **Discount Type** · **Amount** → **Apply Discount**
+- **Preview**
+- ⋮ **Email Invoice**, **Preview Invoice**, **Download Invoice**
+- **Apply Discount** → type and amount → **Apply Discount**
 - **View Transactions**
-- **Change Status** / **Change Billing Status** → **New Status** · **Optional Notes** → Mark as Paid / Denied as shown
+- **Change Status** / **Change Billing Status** → new status and optional notes
 
-(Split/refund appears when the build exposes those menu items.)
+Split or refund appears only when that build exposes those items.
 
-### Related clinic setup
+### Related setup
 
-- Invoice rules: Settings → **Invoice Policies** (Chapter 2)
-- Client online pay: [Payments & Subscription](./ch-02-payments-and-subscription.md) (Stripe Connect) + client guide Chapter 9 **Pay now**
+- Invoice rules: **Settings → Invoice Policies** (Chapter 2)
+- Client card pay: **System → Payments & Subscription → Payment Integration** (Chapter 2 sub-chapter)
+- Client steps: Chapter 9 **Pay an invoice**
 
 ---
 Product: `/admin/billings`

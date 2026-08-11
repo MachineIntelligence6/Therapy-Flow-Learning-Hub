@@ -60,6 +60,14 @@ export function ArticleContent({ blocks, articleTitle }: ArticleContentProps) {
   }
 
   const contentBlocks = stripEmbeddedRelatedLinks(blocks);
+  const idCounts = new Map<string, number>();
+
+  const headingId = (label: string) => {
+    const base = slugify(label);
+    const count = idCounts.get(base) ?? 0;
+    idCounts.set(base, count + 1);
+    return count === 0 ? base : `${base}-${count + 1}`;
+  };
 
   return (
     <article className="article-content-blocks">
@@ -67,8 +75,14 @@ export function ArticleContent({ blocks, articleTitle }: ArticleContentProps) {
         switch (block.type) {
           case 'heading': {
             const Tag = `h${block.level}` as 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6';
+            const label = getInlineText(block.children);
             return (
-              <Tag key={index} id={slugify(getInlineText(block.children))} className="block-heading">
+              <Tag
+                key={index}
+                id={headingId(label)}
+                className="block-heading"
+                data-heading-level={block.level}
+              >
                 {renderText(block.children)}
               </Tag>
             );
@@ -84,7 +98,12 @@ export function ArticleContent({ blocks, articleTitle }: ArticleContentProps) {
               const Tag = `h${level}` as 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6';
               const label = mdHeading[2].trim();
               return (
-                <Tag key={index} id={slugify(label)} className="block-heading">
+                <Tag
+                  key={index}
+                  id={headingId(label)}
+                  className="block-heading"
+                  data-heading-level={level}
+                >
                   {label}
                 </Tag>
               );
@@ -165,18 +184,55 @@ export function ArticleContent({ blocks, articleTitle }: ArticleContentProps) {
   );
 }
 
-export function getTableOfContents(blocks: StrapiBlock[]) {
-  const headings = stripEmbeddedRelatedLinks(blocks).filter(
-    (b): b is Extract<StrapiBlock, { type: 'heading' }> => b.type === 'heading',
-  );
+export type TocItem = {
+  id: string;
+  label: string;
+  level: number;
+};
 
-  // Prefer major section tabs (##) so the left rail is button-sized and readable.
-  const major = headings.filter((b) => b.level === 2);
-  const use = major.length > 0 ? major : headings;
+/**
+ * Build outline from CMS content.
+ * - nested: include h2–h5 (and markdown headings in paragraphs) for curriculum drill-down
+ * - flat major: prefer ## only (legacy side tabs / compact rails)
+ */
+export function getTableOfContents(
+  blocks: StrapiBlock[],
+  options: { nested?: boolean } = {},
+): TocItem[] {
+  const contentBlocks = stripEmbeddedRelatedLinks(blocks);
+  const items: TocItem[] = [];
+  const seen = new Map<string, number>();
 
-  return use.map((block) => ({
-    id: slugify(getInlineText(block.children)),
-    label: getInlineText(block.children),
-    level: block.level,
-  }));
+  const push = (rawLabel: string, level: number) => {
+    const label = rawLabel.trim();
+    if (!label) return;
+    // Skip top-level H1 (chapter title often repeated in body)
+    if (level < 2 || level > 5) return;
+    let id = slugify(label);
+    const count = seen.get(id) ?? 0;
+    if (count > 0) id = `${id}-${count + 1}`;
+    seen.set(slugify(label), count + 1);
+    items.push({ id, label, level });
+  };
+
+  for (const block of contentBlocks) {
+    if (block.type === 'heading') {
+      push(getInlineText(block.children), block.level);
+      continue;
+    }
+    if (block.type === 'paragraph') {
+      const text = getInlineText(block.children);
+      const mdHeading = text.trim().match(/^(#{1,6})\s+(.+)$/);
+      if (mdHeading) {
+        push(mdHeading[2], Math.min(6, mdHeading[1].length));
+      }
+    }
+  }
+
+  if (options.nested) {
+    return items;
+  }
+
+  const major = items.filter((b) => b.level === 2);
+  return major.length > 0 ? major : items;
 }

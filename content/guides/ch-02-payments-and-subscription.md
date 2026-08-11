@@ -1,43 +1,48 @@
-# Chapter 2 — Payments & Subscription (Admin)
+# Chapter 2 - Payments & Subscription (Admin)
 
 **Slug:** `ch-02-payments-and-subscription`  
 **Parent:** `ch-02-clinic-setup`  
 **Audience:** Admin  
 **Order:** 2100
 
-Sub-chapter of **Clinic Setup**. Connect Stripe so clients can pay clinic invoices online, and manage the clinic’s own SmartHub subscription. These are two different billing paths — do not mix them.
+Sub-chapter of **Clinic Setup**. Two separate money flows:
 
-**Primary nav:** Sidebar → **System** → **Settings** → `/admin/settings`
+1. **Payment Integration** - clients pay your clinic invoices (Stripe Connect)
+2. **Subscription** - your clinic pays the TherapyFlow / SmartHub plan
 
-| Tab | Query |
-|-----|--------|
-| **Payment Integration** | `?tab=stripe-connect` |
-| **Subscription** | `?tab=subscription-billing` |
+Do not mix these two tabs.
 
----
+Open from the sidebar: **System → Payments & Subscription** (`/admin/payments-and-subscription`).
 
-## Connect Stripe for client invoice payments
-
-**Payment Integration** = clients pay clinic invoices (Connect).  
-**Subscription** = clinic pays SmartHub SaaS — do not mix.
-
-1. Settings → **Payment Integration**
-2. **Connect Stripe** → complete Stripe onboarding
-3. Return to SmartHub; verify connected status
-4. Optional **Advanced Stripe configuration** → **Save configuration**
-5. **Refresh** / **Disconnect** only when intentional
-
-After connect, clients can use **Pay now** on portal invoices when billing allows.
+- **Payment Integration** tab: online pay for client invoices
+- **Subscription** tab: clinic SmartHub plan, trial, and plan invoices
 
 ---
 
-## Manage the clinic SmartHub subscription
+## Payment Integration (client invoice pay)
 
-1. Settings → **Subscription** (or `/billing/subscription` / `/admin/billing/subscription`)
-2. Review plan, trial, next actions
-3. Add payment method / subscribe / pay invoice as offered
-4. Success path: `/billing/subscription/success`
+Use this so clients can **Pay now** on portal invoices when the invoice is payable.
+
+1. Open **System → Payments & Subscription**
+2. Select **Payment Integration**
+3. Click **Connect Stripe** and finish Stripe onboarding
+4. Return to SmartHub and confirm connected status
+5. Use **Advanced Stripe configuration** and **Save configuration** only if you need extra options
+6. Use **Refresh** or **Disconnect** only when intentional
+
+Until Stripe is connected for the clinic, online **Pay now** for clients will not work as expected.
 
 ---
-Product: `/admin/settings?tab=stripe-connect` · `/admin/settings?tab=subscription-billing`  
-Related: [Clinic Setup](./ch-02-clinic-setup.md) · [Billing & Payments](./ch-06-billing-and-payments.md) · [Client Portal — Pay now](./ch-09-client-portal.md)
+
+## Subscription (clinic SmartHub plan)
+
+Use this for the organisation's own plan, trial status, invoices, and self-serve pay or checkout when offered.
+
+1. Open **System → Payments & Subscription**
+2. Select **Subscription**
+3. Review plan name, status, billing cycle, price, and period end
+4. Follow the primary button offered (for example add payment method, subscribe, pay invoice, or manage billing)
+5. Open an invoice row with **View details** when you need the full invoice breakdown
+6. Use **Pay invoice** when the balance is unpaid and self-serve pay is allowed
+
+After checkout you may land on `/billing/subscription` or `/billing/subscription/success`.

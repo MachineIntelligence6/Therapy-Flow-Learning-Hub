@@ -1,10 +1,10 @@
-# Chapter 7 — Tasks, Content & Compliance
+# Chapter 7 - Tasks, Content & Compliance
 
 **Slug:** `ch-07-tasks-content-compliance`  
 **Audience:** Admin  
 **Order:** 7000
 
-Day-to-day operations for tasks, clinical content templates, notifications config, and compliance logs.
+Day-to-day work for tasks, content templates, notifications setup, and compliance.
 
 ---
 
@@ -13,13 +13,13 @@ Day-to-day operations for tasks, clinical content templates, notifications confi
 **Path:** Sidebar → **Tasks** → `/admin/tasks`
 
 1. Use tabs such as **All tasks** / **Active tasks** (as labeled)
-2. **Add task** → modal **Create new task** → **Create task**
+2. **Add task** → **Create new task** → **Create task**
 3. **Edit task** → **Save changes**
 4. **Task Details** to view
-5. Delete confirm **Delete task?** / **Delete**
-6. **View History** → `/admin/tasks/history` (filters: All / Completed / Overdue / Recent as shown)
+5. Delete with confirm **Delete task?**
+6. **View History** → `/admin/tasks/history` (filters such as All, Completed, Overdue, Recent)
 
-Also create tasks from a client profile **Tasks** tab (Chapter 4).
+You can also create tasks from a client profile **Tasks** tab (Chapter 4).
 
 ---
 
@@ -27,45 +27,52 @@ Also create tasks from a client profile **Tasks** tab (Chapter 4).
 
 **Sidebar → Content**
 
-| Sub-item | Route (typical) | What you do |
-|----------|-----------------|-------------|
-| **Library** | `/admin/content/library` | Manage library entries; filter by **Library Categories** |
-| **Assessment** | `/admin/content/assessment` | Create/manage assessment templates; assign from client later |
-| **Clinical Forms** | `/admin/content/clinical-forms` | Build form templates staff assign on clients |
-| **Process Checklists** | `/admin/content/process-checklists` | Checklist templates for client **Checklists** tab |
-| **Report Templates** | `/admin/content/report-templates` | Upload/manage report templates |
+| Sub-item | Route | Use for |
+|----------|--------|---------|
+| **Library** | `/admin/content/library` | Library entries; filter by **Library Categories** |
+| **Assessment** | `/admin/content/assessment` | Assessment templates; assign from client later |
+| **Clinical Forms** | `/admin/content/clinical-forms` | Form templates for client **Forms & Docs** |
+| **Process Checklists** | `/admin/content/process-checklists` | Templates for client **Checklists** |
+| **Report Templates** | `/admin/content/report-templates` | Report templates |
 
-For each area: create/edit templates with the labels on **Create** / **Save** buttons; then assign from the client profile tabs (**Assessments**, **Forms & Docs**, **Checklists**).
+Create or edit with the on-screen **Create** / **Save** actions, then assign from the matching client profile tabs.
 
 ---
 
 ## 7.3 Notifications
 
-**Admin notifications configuration** (system notifications area under Admin nav as shown, e.g. notifications management):
+**Path:** Sidebar → **System** → **Notifications** → `/admin/system/notifications`
 
-1. Open Admin **Notifications** workspace
-2. Review **Event Catalog**, **Triggers**, **Templates**, **Preferences** (sections present for Admin)
-3. Enable/edit channels and templates as required for clinic events (session, billing, portal, etc.)
-4. Inbox use: top-bar bell → **View all** → work the **Notifications** list
+1. Open Admin **Notifications**
+2. Work the sections your build shows (catalog, triggers, templates, preferences)
+3. Enable channels and templates for clinic events (sessions, billing, portal, and similar)
+4. Day-to-day inbox: top bar bell → **View all**
 
-Therapists get an inbox only (see Chapter 8); full catalog/triggers typically remain Admin.
+Therapists mainly use an inbox (Chapter 8). Full catalog and triggers stay with Admin.
 
 ---
 
 ## 7.4 Compliance
 
+**Sidebar → Compliance**
+
+| Item | Route |
+|------|--------|
+| **HIPAA Audit** | `/admin/compliance/hipaa` |
+| **Privacy & Consent** | `/admin/compliance/privacy` |
+
 ### Privacy & Consent
 
-1. Open **Privacy & Consent** / compliance privacy area under Admin (**Compliance** menu as labeled)
-2. Review consent types and status tools available
-3. Do not disable required clinical consents without policy approval
+1. Open **Privacy & Consent**
+2. Review consent types and tools shown
+3. Do not change required clinical consents without clinic policy approval
 
-### HIPAA audit log
+### HIPAA Audit
 
-1. Open **HIPAA Audit** / audit log (sidebar **Compliance** as labeled)
-2. Filter by date / user / action when filters exist
-3. Scroll event rows for PHI access and admin actions
-4. **Export Report** when you need an export
+1. Open **HIPAA Audit**
+2. Filter by date, user, or action when filters exist
+3. Review rows for access and admin actions
+4. Use **Export Report** when you need an export
 
 ---
-Product: `/admin/tasks` · `/admin/content/*` · compliance routes under Admin sidebar
+Product: `/admin/tasks` · `/admin/content/*` · `/admin/system/notifications` · `/admin/compliance/*`
