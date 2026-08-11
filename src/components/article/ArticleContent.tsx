@@ -34,11 +34,24 @@ function stripEmbeddedRelatedLinks(blocks: StrapiBlock[]): StrapiBlock[] {
   const relatedHeadingIndex = blocks.findIndex((block) => {
     if (block.type !== 'heading') return false;
     const text = getInlineText(block.children).trim().toLowerCase();
-    return text === 'related links' || text === 'related link';
+    return text === 'related links' || text === 'related link' || text === 'related';
   });
 
-  if (relatedHeadingIndex === -1) return blocks;
-  return blocks.slice(0, relatedHeadingIndex);
+  let sliced =
+    relatedHeadingIndex === -1 ? blocks : blocks.slice(0, relatedHeadingIndex);
+
+  // Also drop leftover raw "Related: ..." paragraphs from content.
+  sliced = sliced.filter((block) => {
+    if (block.type !== 'paragraph') return true;
+    const text = getInlineText(block.children).trim().toLowerCase();
+    if (text.startsWith('related:')) return false;
+    if (text.startsWith('related paths')) return false;
+    if (text.startsWith('next:')) return false;
+    if (text.startsWith('product:')) return false;
+    return true;
+  });
+
+  return sliced;
 }
 
 export function ArticleContent({ blocks, articleTitle }: ArticleContentProps) {
@@ -63,6 +76,19 @@ export function ArticleContent({ blocks, articleTitle }: ArticleContentProps) {
 
           case 'paragraph': {
             const text = getInlineText(block.children);
+
+            // Recover mis-seeded markdown headings still stored as paragraphs
+            const mdHeading = text.trim().match(/^(#{1,6})\s+(.+)$/);
+            if (mdHeading) {
+              const level = Math.min(6, mdHeading[1].length) as 1 | 2 | 3 | 4 | 5 | 6;
+              const Tag = `h${level}` as 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6';
+              const label = mdHeading[2].trim();
+              return (
+                <Tag key={index} id={slugify(label)} className="block-heading">
+                  {label}
+                </Tag>
+              );
+            }
 
             // Video embed: paragraph contains only a URL
             if (isUrlOnlyParagraph(text)) {
@@ -140,11 +166,17 @@ export function ArticleContent({ blocks, articleTitle }: ArticleContentProps) {
 }
 
 export function getTableOfContents(blocks: StrapiBlock[]) {
-  return stripEmbeddedRelatedLinks(blocks)
-    .filter((b): b is Extract<StrapiBlock, { type: 'heading' }> => b.type === 'heading')
-    .map((block) => ({
-      id: slugify(getInlineText(block.children)),
-      label: getInlineText(block.children),
-      level: block.level,
-    }));
+  const headings = stripEmbeddedRelatedLinks(blocks).filter(
+    (b): b is Extract<StrapiBlock, { type: 'heading' }> => b.type === 'heading',
+  );
+
+  // Prefer major section tabs (##) so the left rail is button-sized and readable.
+  const major = headings.filter((b) => b.level === 2);
+  const use = major.length > 0 ? major : headings;
+
+  return use.map((block) => ({
+    id: slugify(getInlineText(block.children)),
+    label: getInlineText(block.children),
+    level: block.level,
+  }));
 }

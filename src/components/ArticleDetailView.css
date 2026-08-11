@@ -130,12 +130,15 @@
   padding: 12px 16px;
   font-size: 14px;
   font-weight: 600;
+  line-height: 1.35;
   color: var(--Neutral-600);
-  border-radius: var(--Numbers-sm);
+  border-radius: 10px;
   background: none;
   border: none;
   cursor: pointer;
   transition: all var(--transition-fast);
+  font-family: inherit;
+  letter-spacing: 0;
 }
 
 .sidebar-tab-btn:hover {
@@ -231,11 +234,42 @@
 
 /* Blocks element helpers */
 .block-heading {
-  font-size: 18px;
-  font-weight: 700;
   color: var(--Neutral-950);
   margin-top: 24px;
   margin-bottom: 10px;
+  line-height: 1.35;
+}
+
+h2.block-heading {
+  font-size: 22px;
+  font-weight: 700;
+  margin-top: 32px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--Neutral-200, #e2e8f0);
+}
+
+h3.block-heading {
+  font-size: 18px;
+  font-weight: 700;
+  margin-top: 28px;
+}
+
+h4.block-heading {
+  font-size: 15px;
+  font-weight: 700;
+  margin-top: 20px;
+  margin-bottom: 8px;
+  color: var(--primary-800-p, #1e4a5c);
+  letter-spacing: 0.01em;
+}
+
+h5.block-heading,
+h6.block-heading {
+  font-size: 14px;
+  font-weight: 700;
+  margin-top: 16px;
+  margin-bottom: 6px;
+  color: var(--Neutral-700, #334155);
 }
 
 .block-ul,

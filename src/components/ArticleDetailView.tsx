@@ -1,15 +1,8 @@
 import React, { useState, useEffect, useRef, useMemo } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { Loader2 } from 'lucide-react';
 import type { Article } from '../types';
 import type { StrapiBlock } from '../types/strapi-blocks';
 import { strapiService } from '../services/strapi';
-import {
-  buildHubBrowseUrl,
-  getArticleChapterLabel,
-  getChapterBrowseFilters,
-  getSectionBrowseFilters,
-} from '../utils/breadcrumbs';
 import { ArticleContent, getTableOfContents } from './article/ArticleContent';
 import { RelatedLinks } from './article/RelatedLinks';
 import { Breadcrumbs, type BreadcrumbItem } from './Breadcrumbs';
@@ -27,7 +20,6 @@ export const ArticleDetailView: React.FC<ArticleDetailViewProps> = ({
   onClose,
   onSelectArticle,
 }) => {
-  const navigate = useNavigate();
   const [article, setArticle] = useState<Article | null>(initialArticle);
   const [isLoading, setIsLoading] = useState(false);
   const [activeHeadingId, setActiveHeadingId] = useState<string>('');
@@ -137,6 +129,23 @@ export const ArticleDetailView: React.FC<ArticleDetailViewProps> = ({
     }
   };
 
+  const displayArticle = article || initialArticle;
+
+  // Home + title only — chapter/section crumbs duplicated the H1 and sidebar
+  const breadcrumbItems = useMemo<BreadcrumbItem[]>(() => {
+    if (!displayArticle) return [];
+    return [
+      {
+        label: 'Home',
+        onClick: onClose,
+      },
+      {
+        label: displayArticle.title,
+        current: true,
+      },
+    ];
+  }, [displayArticle, onClose]);
+
   if (!initialArticle) return null;
 
   const contentBlocks =
@@ -144,43 +153,7 @@ export const ArticleDetailView: React.FC<ArticleDetailViewProps> = ({
       ? (article.content as StrapiBlock[])
       : null;
 
-  const displayArticle = article || initialArticle;
-  const chapterLabel = getArticleChapterLabel(displayArticle);
-  const sectionLabel = displayArticle.section?.trim() || undefined;
   const hasSidebar = headingsList.length > 0;
-
-  const breadcrumbItems = useMemo<BreadcrumbItem[]>(() => {
-    const items: BreadcrumbItem[] = [
-      {
-        label: 'Home',
-        onClick: onClose,
-      },
-    ];
-
-    if (chapterLabel) {
-      items.push({
-        label: chapterLabel,
-        onClick: () => navigate(buildHubBrowseUrl(getChapterBrowseFilters(displayArticle))),
-      });
-    }
-
-    if (sectionLabel) {
-      const sectionFilters = getSectionBrowseFilters(displayArticle);
-      items.push({
-        label: sectionLabel,
-        ...(sectionFilters
-          ? { onClick: () => navigate(buildHubBrowseUrl(sectionFilters)) }
-          : {}),
-      });
-    }
-
-    items.push({
-      label: displayArticle.title,
-      current: true,
-    });
-
-    return items;
-  }, [chapterLabel, displayArticle, navigate, onClose, sectionLabel]);
 
   const handleRelatedArticle = async (slug: string) => {
     if (!onSelectArticle) {

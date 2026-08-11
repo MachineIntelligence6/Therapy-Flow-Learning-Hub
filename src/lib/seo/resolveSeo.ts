@@ -106,54 +106,18 @@ export function buildArticleJsonLd(
 
 export function buildBreadcrumbJsonLd(article: Article, global?: GlobalSiteSettings | null) {
   const domain = (global?.LearningHub_Domain || DEFAULT_HUB_DOMAIN).replace(/\/$/, '');
-  const chapterLabel = article.chapter?.trim() || article.category?.trim();
-  const sectionLabel = article.section?.trim();
 
+  // Keep JSON-LD aligned with on-page crumbs: hub home + article
   const itemListElement: Array<Record<string, unknown>> = [
     { '@type': 'ListItem', position: 1, name: 'TherapyFlow', item: global?.Landing_Domain || 'https://therapyflow.pro' },
     { '@type': 'ListItem', position: 2, name: 'Learning Hub', item: `${domain}/` },
+    {
+      '@type': 'ListItem',
+      position: 3,
+      name: article.title,
+      item: `${domain}/${article.slug}`,
+    },
   ];
-
-  let position = 3;
-
-  if (chapterLabel) {
-    const chapterUrl = article.chapter?.trim()
-      ? `${domain}/?chapter=${encodeURIComponent(chapterLabel)}`
-      : `${domain}/?category=${encodeURIComponent(chapterLabel)}`;
-
-    itemListElement.push({
-      '@type': 'ListItem',
-      position,
-      name: chapterLabel,
-      item: chapterUrl,
-    });
-    position += 1;
-  }
-
-  if (sectionLabel && chapterLabel) {
-    const sectionParams = new URLSearchParams();
-    if (article.chapter?.trim()) {
-      sectionParams.set('chapter', chapterLabel);
-    } else {
-      sectionParams.set('category', article.category);
-    }
-    sectionParams.set('section', sectionLabel);
-
-    itemListElement.push({
-      '@type': 'ListItem',
-      position,
-      name: sectionLabel,
-      item: `${domain}/?${sectionParams.toString()}`,
-    });
-    position += 1;
-  }
-
-  itemListElement.push({
-    '@type': 'ListItem',
-    position,
-    name: article.title,
-    item: `${domain}/${article.slug}`,
-  });
 
   return {
     '@context': 'https://schema.org',
