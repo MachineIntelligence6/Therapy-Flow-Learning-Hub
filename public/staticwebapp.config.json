@@ -1,11 +1,30 @@
 {
   "navigationFallback": {
     "rewrite": "/index.html",
-    "exclude": ["/assets/*", "/*.css", "/*.js", "/*.svg", "/*.png", "/*.webp", "/*.xml", "/*.txt"]
+    "exclude": [
+      "/assets/*",
+      "/*.{css,js,mjs,map,svg,png,webp,ico,xml,txt,json,woff,woff2}"
+    ]
   },
   "routes": [
-    { "route": "/learning-hub", "redirect": "/", "statusCode": 301 }
+    { "route": "/learning-hub", "redirect": "/", "statusCode": 301 },
+    {
+      "route": "/src/*",
+      "statusCode": 404
+    }
   ],
+  "mimeTypes": {
+    ".js": "text/javascript",
+    ".mjs": "text/javascript",
+    ".css": "text/css",
+    ".json": "application/json",
+    ".png": "image/png",
+    ".svg": "image/svg+xml",
+    ".webp": "image/webp",
+    ".ico": "image/x-icon",
+    ".xml": "application/xml",
+    ".txt": "text/plain"
+  },
   "globalHeaders": {
     "X-Content-Type-Options": "nosniff"
   }

@@ -129,24 +129,25 @@ export const ArticleDetailView: React.FC<ArticleDetailViewProps> = ({
     }
   };
 
-  const displayArticle = article || initialArticle;
-
   // Home + title only — chapter/section crumbs duplicated the H1 and sidebar
   const breadcrumbItems = useMemo<BreadcrumbItem[]>(() => {
-    if (!displayArticle) return [];
+    const current = article || initialArticle;
+    if (!current) return [];
     return [
       {
         label: 'Home',
         onClick: onClose,
       },
       {
-        label: displayArticle.title,
+        label: current.title,
         current: true,
       },
     ];
-  }, [displayArticle, onClose]);
+  }, [article, initialArticle, onClose]);
 
   if (!initialArticle) return null;
+
+  const displayArticle = article ?? initialArticle;
 
   const contentBlocks =
     article?.content && Array.isArray(article.content)
