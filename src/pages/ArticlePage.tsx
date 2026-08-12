@@ -114,6 +114,8 @@ export const ArticlePage = () => {
           chapters={chapters}
           onClose={() => navigate('/')}
           onSelectArticle={(next) => navigate(`/${next.slug}`)}
+          isExternalLoading={isLoading}
+          targetSlug={slug || null}
         />
       </Suspense>
     );

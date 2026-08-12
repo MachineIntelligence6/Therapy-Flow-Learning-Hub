@@ -33,6 +33,11 @@ interface ArticleDetailViewProps {
   chapters?: Article[];
   onClose: () => void;
   onSelectArticle?: (article: Article) => void;
+  // When navigating between chapters, ArticlePage may still have the old article
+  // payload while the new one is loading. Use these props to show an immediate
+  // loader overlay in the lesson content area without removing the sidebar.
+  isExternalLoading?: boolean;
+  targetSlug?: string | null;
 }
 
 type HeadingItem = { id: string; label: string; level: number; title?: string };
@@ -42,6 +47,8 @@ export const ArticleDetailView: React.FC<ArticleDetailViewProps> = ({
   chapters = [],
   onClose,
   onSelectArticle,
+  isExternalLoading = false,
+  targetSlug = null,
 }) => {
   const [article, setArticle] = useState<Article | null>(initialArticle);
   const [isLoading, setIsLoading] = useState(false);
@@ -147,6 +154,10 @@ export const ArticleDetailView: React.FC<ArticleDetailViewProps> = ({
   if (!initialArticle) return null;
 
   const displayArticle = article ?? initialArticle;
+  const isNavigatingAway =
+    Boolean(isExternalLoading) &&
+    Boolean(targetSlug) &&
+    displayArticle?.slug !== targetSlug;
   const slug = displayArticle.slug;
   const done = isChapterComplete(slug, progress);
   const idx = chapterIndex(orderedChapters, slug);
@@ -340,7 +351,20 @@ export const ArticleDetailView: React.FC<ArticleDetailViewProps> = ({
               ) : null}
             </header>
 
-            <div className="course-lesson-content">{renderBody()}</div>
+            <div className="course-lesson-content">
+              {renderBody()}
+              {isNavigatingAway ? (
+                <div
+                  className="course-lesson-content-loading-overlay"
+                  aria-label="Loading lesson"
+                >
+                  <div className="course-lesson-content-loading-inner">
+                    <Loader2 className="spin-loading" size={32} />
+                    <p>Loading content…</p>
+                  </div>
+                </div>
+              ) : null}
+            </div>
             {lessonActions}
           </div>
 
