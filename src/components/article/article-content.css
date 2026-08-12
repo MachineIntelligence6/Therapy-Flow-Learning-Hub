@@ -41,6 +41,17 @@
   box-sizing: border-box;
 }
 
+.article-content-blocks .inline-link {
+  color: #2563eb;
+  text-decoration: underline;
+  font-weight: 600;
+  word-break: break-word;
+}
+
+.article-content-blocks .inline-link:hover {
+  color: #1d4ed8;
+}
+
 .block-code {
   background: var(--Neutral-100, #f5f5f5);
   padding: 1rem;

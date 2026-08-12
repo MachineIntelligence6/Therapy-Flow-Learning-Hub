@@ -15,15 +15,87 @@ type ArticleContentProps = {
   articleTitle?: string;
 };
 
-function renderText(children: StrapiTextNode[]) {
-  return children.map((node, i) => {
-    let el: ReactNode = node.text;
+/** Match http(s) URLs in plain CMS text so they render as clickable links. */
+const URL_IN_TEXT_RE = /https?:\/\/[^\s<>"'`)\]]+/g;
 
-    if (node.bold) el = <strong key={i}>{el}</strong>;
-    if (node.italic) el = <em key={i}>{el}</em>;
-    if (node.underline) el = <u key={i}>{el}</u>;
-    if (node.strikethrough) el = <del key={i}>{el}</del>;
-    if (node.code) el = <code key={i}>{el}</code>;
+function trimTrailingPunctuation(url: string): { href: string; trailing: string } {
+  const cleaned = url.replace(/[.,;:!?]+$/g, '');
+  return { href: cleaned, trailing: url.slice(cleaned.length) };
+}
+
+function linkifyPlainText(text: string, keyPrefix: string | number): ReactNode[] {
+  const nodes: ReactNode[] = [];
+  let lastIndex = 0;
+  let match: RegExpExecArray | null;
+  const re = new RegExp(URL_IN_TEXT_RE.source, 'g');
+  let n = 0;
+
+  while ((match = re.exec(text)) !== null) {
+    if (match.index > lastIndex) {
+      nodes.push(text.slice(lastIndex, match.index));
+    }
+
+    const { href, trailing } = trimTrailingPunctuation(match[0]);
+    nodes.push(
+      <a
+        key={`${keyPrefix}-link-${n++}`}
+        href={href}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="inline-link"
+      >
+        {href}
+      </a>,
+    );
+    if (trailing) nodes.push(trailing);
+    lastIndex = match.index + match[0].length;
+  }
+
+  if (lastIndex < text.length) nodes.push(text.slice(lastIndex));
+  return nodes.length > 0 ? nodes : [text];
+}
+
+type InlineChild =
+  | StrapiTextNode
+  | {
+      type: 'link';
+      url?: string;
+      children?: StrapiTextNode[];
+    };
+
+function renderText(children: InlineChild[] | StrapiTextNode[] | undefined) {
+  if (!children?.length) return null;
+
+  return children.map((node, i) => {
+    // Strapi/CMS link nodes
+    if ((node as { type?: string }).type === 'link') {
+      const link = node as { type: 'link'; url?: string; children?: StrapiTextNode[] };
+      const href = link.url || getInlineText(link.children || []);
+      if (!href) return null;
+      const label = link.children?.length ? renderText(link.children) : href;
+      const isExternal = /^https?:\/\//i.test(href);
+      return (
+        <a
+          key={i}
+          href={href}
+          className="inline-link"
+          {...(isExternal
+            ? { target: '_blank', rel: 'noopener noreferrer' }
+            : {})}
+        >
+          {label}
+        </a>
+      );
+    }
+
+    const textNode = node as StrapiTextNode;
+    let el: ReactNode = linkifyPlainText(textNode.text || '', i);
+
+    if (textNode.bold) el = <strong key={`b-${i}`}>{el}</strong>;
+    if (textNode.italic) el = <em key={`i-${i}`}>{el}</em>;
+    if (textNode.underline) el = <u key={`u-${i}`}>{el}</u>;
+    if (textNode.strikethrough) el = <del key={`d-${i}`}>{el}</del>;
+    if (textNode.code) el = <code key={`c-${i}`}>{el}</code>;
 
     return <span key={i}>{el}</span>;
   });

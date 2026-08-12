@@ -616,9 +616,14 @@ h6.block-heading {
 }
 
 .inline-link {
-  color: var(--primary-800-p);
+  color: #2563eb;
   text-decoration: underline;
   font-weight: 600;
+  word-break: break-word;
+}
+
+.inline-link:hover {
+  color: #1d4ed8;
 }
 
 .section-file-attachment {
