@@ -1,9 +1,8 @@
-# Chapter 12 - System Settings (Admin)
+# Chapter 3 - System Settings (Admin)
 
 **Slug:** `ch-12-system-settings`  
 **Audience:** Admin  
-**Order:** 12000
-
+**Order:** 3000
 Configure dropdown catalogs, the therapy services you sell and book, and invoice pricing rules under **System → Settings**.
 
 **Primary path:** Sidebar → **System** → **Settings** → `/admin/settings`
@@ -18,7 +17,7 @@ Other Settings tabs (rooms, library, administration) are covered in Clinic Setup
 
 ---
 
-## 12.1 System Options
+## 3.1 System Options
 
 System Options are the lists behind many dropdowns: client type, client source, gender, session type, employment status, and other clinic catalogs.
 
@@ -70,7 +69,7 @@ If the option is missing, confirm it is under the correct category, is active, a
 
 ---
 
-## 12.2 Services (session offerings)
+## 3.2 Services (session offerings)
 
 Services define what you book and invoice: code, name, duration, price, and whether therapists or clients can see the service when scheduling.
 
@@ -117,7 +116,7 @@ Common issue: the service exists in the table but clients cannot book it because
 
 ---
 
-## 12.3 Invoice Policies
+## 3.3 Invoice Policies
 
 Invoice policies set dynamic pricing rules by client type, session status, price type (fixed amount or percentage), service scope, and related options. Enabled policies apply when staff create session billing / invoices.
 
@@ -149,7 +148,7 @@ Invoice policies set dynamic pricing rules by client type, session status, price
 The policy does **not** run on the Settings screen itself. It runs when billing creates an invoice for a matching session:
 
 1. Complete or status-update a session so it is ready for billing (per your clinic process)
-2. Create the invoice from the session / client billing flow (Chapter 6)
+2. Create the invoice from the session / client billing flow (Chapter 9)
 3. SmartHub evaluates enabled policies against that session’s client type, status, service, and rules
 4. The matching policy adjusts invoice price (for example percentage off base rate, or fixed amount)
 5. Open the invoice (list or **View details**) and confirm the amount reflects the policy

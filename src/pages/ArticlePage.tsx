@@ -76,7 +76,9 @@ export const ArticlePage = () => {
   }, [article, globalSettings, config.apiUrl]);
 
   const pageContent = (() => {
-    if (isLoading) {
+    // During lesson navigation we keep rendering the previous ArticleDetailView
+    // so the curriculum sidebar doesn't disappear while the new article loads.
+    if (isLoading && !article) {
       return (
         <div className="loader-container" style={{ minHeight: '60vh' }}>
           <Loader2 className="spinner-icon" size={48} />

@@ -1,9 +1,8 @@
-# Chapter 6 - Billing & Payments
+# Chapter 9 - Billing & Payments
 
 **Slug:** `ch-06-billing-and-payments`  
 **Audience:** Admin (Therapist with access: `/therapist/billings`)  
-**Order:** 6000
-
+**Order:** 9000
 Run clinic invoice records: search, filter, record payments, email, download, discount, and status.
 
 **Path:** Sidebar → **Billings** → `/admin/billings`
@@ -12,7 +11,7 @@ Online client **Pay now** depends on Stripe Connect under **System → Payments 
 
 ---
 
-## 6.1 Billings workspace (Admin)
+## 9.1 Billings workspace (Admin)
 
 ### Overview cards
 
@@ -57,9 +56,9 @@ Split or refund appears only when that build exposes those items.
 
 ### Related setup
 
-- Invoice rules: **Settings → Invoice Policies** (Chapter 2)
-- Client card pay: **System → Payments & Subscription → Payment Integration** (Chapter 2 sub-chapter)
-- Client steps: Chapter 9 **Pay an invoice**
+- Invoice rules: **Settings → Invoice Policies** (Chapter 3)
+- Client card pay: **System → Payments & Subscription → Payment Integration** (Chapter 13)
+- Client steps: Chapter 12 **Pay an invoice**
 
 ---
 Product: `/admin/billings`

@@ -1,16 +1,15 @@
-# Chapter 4 - Clients & Portal Access
+# Chapter 6 - Clients & Portal Access
 
 **Slug:** `ch-04-clients-and-portal-access`  
 **Audience:** Admin (Therapist can create and open clients under `/therapist/clients`)  
-**Order:** 4000
-
+**Order:** 6000
 Create patient records, set portal access, and work the full client profile.
 
 **Primary path:** Sidebar → **Clients** → `/admin/clients`
 
 ---
 
-## 4.1 Create clients and portal access
+## 6.1 Create clients and portal access
 
 ### Add New Client
 
@@ -80,7 +79,7 @@ On Overview:
 
 ---
 
-## 4.2 Client profile tabs
+## 6.2 Client profile tabs
 
 Exact tab labels:
 
@@ -96,7 +95,7 @@ Exact tab labels:
 
 ### Sessions
 
-Open **Sessions**. Use **Schedule Session** / **+ Schedule Session** for **Schedule New Session** (see Chapter 5). Session card ⋮ covers edit, status, notes, recording, invoice when status allows.
+Open **Sessions**. Use **Schedule Session** / **+ Schedule Session** for **Schedule New Session** (see Chapter 7). Session card ⋮ covers edit, status, notes, recording, invoice when status allows.
 
 ### Assessments
 
@@ -120,4 +119,4 @@ Open **History**. Use communications / **Email History** as labeled. **Add Note*
 
 ### Billing
 
-Review invoices for this client. Use the main **Billings** workspace (Chapter 6) for pay, email, download, and status.
+Review invoices for this client. Use the main **Billings** workspace (Chapter 9) for pay, email, download, and status.

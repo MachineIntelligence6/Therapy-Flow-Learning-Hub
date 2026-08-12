@@ -315,6 +315,35 @@ export const ArticleDetailView: React.FC<ArticleDetailViewProps> = ({
         </div>
 
         <div className="course-player">
+          <div className="course-lesson-main">
+            <div className="course-lesson-toolbar">
+              <button
+                type="button"
+                className="course-mobile-nav-btn"
+                onClick={() => setMobileNavOpen(true)}
+              >
+                <List size={18} aria-hidden />
+                Curriculum
+              </button>
+              <span className={`course-status-chip${done ? ' is-done' : ''}`}>
+                {done ? 'Complete' : 'In progress'}
+              </span>
+            </div>
+
+            <header className="course-lesson-hero">
+              <p className="course-lesson-kicker">
+                Chapter {chapterNum} of {totalChapters}
+              </p>
+              <h1 className="course-lesson-title">{displayArticle.title}</h1>
+              {displayArticle.description ? (
+                <p className="course-lesson-lede">{displayArticle.description}</p>
+              ) : null}
+            </header>
+
+            <div className="course-lesson-content">{renderBody()}</div>
+            {lessonActions}
+          </div>
+
           <aside
             ref={curriculumRef}
             className={`course-curriculum${mobileNavOpen ? ' is-open' : ''}`}
@@ -388,35 +417,6 @@ export const ArticleDetailView: React.FC<ArticleDetailViewProps> = ({
               onClick={() => setMobileNavOpen(false)}
             />
           ) : null}
-
-          <div className="course-lesson-main">
-            <div className="course-lesson-toolbar">
-              <button
-                type="button"
-                className="course-mobile-nav-btn"
-                onClick={() => setMobileNavOpen(true)}
-              >
-                <List size={18} aria-hidden />
-                Curriculum
-              </button>
-              <span className={`course-status-chip${done ? ' is-done' : ''}`}>
-                {done ? 'Complete' : 'In progress'}
-              </span>
-            </div>
-
-            <header className="course-lesson-hero">
-              <p className="course-lesson-kicker">
-                Chapter {chapterNum} of {totalChapters}
-              </p>
-              <h1 className="course-lesson-title">{displayArticle.title}</h1>
-              {displayArticle.description ? (
-                <p className="course-lesson-lede">{displayArticle.description}</p>
-              ) : null}
-            </header>
-
-            <div className="course-lesson-content">{renderBody()}</div>
-            {lessonActions}
-          </div>
         </div>
       </div>
   );

@@ -3,7 +3,6 @@
 **Slug:** `ch-02-clinic-setup`  
 **Audience:** Admin  
 **Order:** 2000
-
 Set up the clinic before busy client and session work: practice details, catalogs, services, rooms, and invoice rules.
 
 Payments and Stripe are **not** in Settings. Use **System → Payments & Subscription** for client payments and the clinic SmartHub plan (see related guides at the bottom of that page).

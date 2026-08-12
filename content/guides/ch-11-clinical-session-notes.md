@@ -1,9 +1,8 @@
-# Chapter 11 - Clinical Session Notes
+# Chapter 8 - Clinical Session Notes
 
-**Slug:** `ch-11-clinical-session-notes`  
+**Slug:** `ch-10-clinical-session-notes`  
 **Audience:** Admin and Therapist  
-**Order:** 11000
-
+**Order:** 8000
 Record the clinical conversation for a session, use the transcript to fill the session note, and finalize the note when work is complete.
 
 **Primary paths**
@@ -13,11 +12,11 @@ Record the clinical conversation for a session, use the transcript to fill the s
 | Admin | **Clients** → open client → **Sessions**, or **Scheduling** |
 | Therapist | **Clients** → open client → **Sessions**, or **Scheduling** |
 
-You need an existing session with a client. Book sessions first (Chapter 5 Admin, or Chapter 8 Therapist).
+You need an existing session with a client. Book sessions first (Chapter 7 Admin, or Chapter 11 Therapist).
 
 ---
 
-## 11.1 Record a session for notes
+## 8.1 Record a session for notes
 
 Use this when you want AI-supported notes from a live session recording.
 
@@ -36,7 +35,7 @@ You cannot record again on a session that already has a transcript, or when sess
 
 ---
 
-## 11.2 Review the transcript and identify speakers
+## 8.2 Review the transcript and identify speakers
 
 1. On the same session, open **⋮** → **Show Transcript**
 2. Review the transcript text and timestamps
@@ -49,7 +48,7 @@ Identify Speakers needs a finalized transcript. If the button is not available y
 
 ---
 
-## 11.3 Add the session note and Smart Fill
+## 8.3 Add the session note and Smart Fill
 
 1. On the session card, open **Add Note** (after a note exists the label is usually **View Note**)
 2. The modal title is **Add Session Note** (or **Session Note Edit** when updating)
@@ -65,7 +64,7 @@ Smart Fill pulls from the session transcript. Better recordings and complete tra
 
 ---
 
-## 11.4 Finalize the session note
+## 8.4 Finalize the session note
 
 1. Stay in the session note modal
 2. Review clinical fields and any generated final note text

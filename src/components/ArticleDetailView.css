@@ -243,7 +243,8 @@
   margin: 0 auto;
   padding: 24px 20px 56px;
   display: grid;
-  grid-template-columns: minmax(260px, 300px) minmax(0, 1fr);
+  /* Put content on the left and curriculum on the right */
+  grid-template-columns: minmax(0, 1fr) minmax(260px, 300px);
   gap: 24px;
   align-items: start;
   position: relative;

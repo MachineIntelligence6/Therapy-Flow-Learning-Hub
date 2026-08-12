@@ -1,14 +1,13 @@
-# Chapter 7 - Tasks, Content & Compliance
+# Chapter 10 - Tasks, Content & Compliance
 
 **Slug:** `ch-07-tasks-content-compliance`  
 **Audience:** Admin  
-**Order:** 7000
-
+**Order:** 10000
 Day-to-day work for tasks, content templates, notifications setup, and compliance.
 
 ---
 
-## 7.1 Tasks
+## 10.1 Tasks
 
 **Path:** Sidebar → **Tasks** → `/admin/tasks`
 
@@ -19,11 +18,11 @@ Day-to-day work for tasks, content templates, notifications setup, and complianc
 5. Delete with confirm **Delete task?**
 6. **View History** → `/admin/tasks/history` (filters such as All, Completed, Overdue, Recent)
 
-You can also create tasks from a client profile **Tasks** tab (Chapter 4).
+You can also create tasks from a client profile **Tasks** tab (Chapter 6).
 
 ---
 
-## 7.2 Content templates
+## 10.2 Content templates
 
 **Sidebar → Content**
 
@@ -39,7 +38,7 @@ Create or edit with the on-screen **Create** / **Save** actions, then assign fro
 
 ---
 
-## 7.3 Notifications
+## 10.3 Notifications
 
 **Path:** Sidebar → **System** → **Notifications** → `/admin/system/notifications`
 
@@ -48,11 +47,11 @@ Create or edit with the on-screen **Create** / **Save** actions, then assign fro
 3. Enable channels and templates for clinic events (sessions, billing, portal, and similar)
 4. Day-to-day inbox: top bar bell → **View all**
 
-Therapists mainly use an inbox (Chapter 8). Full catalog and triggers stay with Admin.
+Therapists mainly use an inbox (Chapter 11). Full catalog and triggers stay with Admin.
 
 ---
 
-## 7.4 Compliance
+## 10.4 Compliance
 
 **Sidebar → Compliance**
 

@@ -1,9 +1,8 @@
-# Chapter 9 - Client Portal
+# Chapter 12 - Client Portal
 
 **Slug:** `ch-09-client-portal`  
 **Audience:** Client  
-**Order:** 9000
-
+**Order:** 12000
 Activate access, book and review sessions, manage profile, documents, forms, and invoices.
 
 **Client sidebar**
@@ -20,7 +19,7 @@ After activation, login is `/auth/login` only (never staff login).
 
 ---
 
-## 9.1 Activate and sign in
+## 12.1 Activate and sign in
 
 ### Activate from email
 
@@ -46,7 +45,7 @@ Forgotten password: `/auth/forgot-password` (Chapter 1).
 
 ---
 
-## 9.2 Book and review appointments
+## 12.2 Book and review appointments
 
 ### Book an appointment
 
@@ -71,7 +70,7 @@ List filters: **Upcoming**, **Previous**, plus search as shown.
 
 ---
 
-## 9.3 Profile, documents, forms, pay
+## 12.3 Profile, documents, forms, pay
 
 ### My Profile and Privacy
 
@@ -103,7 +102,7 @@ List filters: **Upcoming**, **Previous**, plus search as shown.
 4. Cancelled checkout can show a cancelled message
 5. **Receipt** download when available
 
-Requires clinic **Payment Integration** under **System → Payments & Subscription** (see Chapter 2 sub-chapter) and a payable invoice.
+Requires clinic **Payment Integration** under **System → Payments & Subscription** (see Chapter 13) and a payable invoice.
 
 ---
 Product: `/user/*`

@@ -1,9 +1,8 @@
-# Chapter 3 - People & Access (Admin)
+# Chapter 4 - People & Access (Admin)
 
 **Slug:** `ch-03-people-and-access`  
 **Audience:** Admin  
-**Order:** 3000
-
+**Order:** 4000
 Create roles, create users with passwords, finish professional profiles and schedules, assign supervisors, and review duplicates.
 
 **Primary path:** Sidebar → **User & Access**
@@ -16,7 +15,7 @@ Create roles, create users with passwords, finish professional profiles and sche
 
 ---
 
-## 3.1 Roles
+## 4.1 Roles
 
 ### Create and manage roles
 
@@ -31,7 +30,7 @@ Create Therapist and custom staff roles before bulk user create so the **Role** 
 
 ---
 
-## 3.2 Users and professional profiles
+## 4.2 Users and professional profiles
 
 ### Create a therapist or staff user
 

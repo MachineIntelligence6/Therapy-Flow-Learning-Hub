@@ -3,7 +3,6 @@
 **Slug:** `ch-10-staff-custom-roles`  
 **Audience:** Custom staff / supervisors (permission-driven)  
 **Order:** 10000
-
 How custom staff access differs from full Admin or dedicated Therapist homes when the menu comes from role permissions.
 
 ---

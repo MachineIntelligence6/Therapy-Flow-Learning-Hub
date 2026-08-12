@@ -3,7 +3,6 @@
 **Slug:** `ch-01-getting-started`  
 **Audience:** Everyone (Admin, Therapist, Staff, Client)  
 **Order:** 1000
-
 Use the right login portal, finish first access setup, then open SmartHub.
 
 ---

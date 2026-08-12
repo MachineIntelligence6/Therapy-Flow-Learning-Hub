@@ -1,9 +1,8 @@
-# Chapter 8 - Therapist Workspace
+# Chapter 11 - Therapist Workspace
 
 **Slug:** `ch-08-therapist-workspace`  
 **Audience:** Therapist  
-**Order:** 8000
-
+**Order:** 11000
 Therapist first days: caseload, schedule, booking, billings, tasks, and notifications.
 
 **Therapist sidebar**
@@ -20,7 +19,7 @@ Login is always `/auth/staff/login` (never client `/auth/login`).
 
 ---
 
-## 8.1 First days
+## 11.1 First days
 
 ### Login and dashboard
 
@@ -36,20 +35,20 @@ Login is always `/auth/staff/login` (never client `/auth/login`).
 2. Sections: **Basic Info**, **License**, **Specializations**, **Background**, **Schedule**, **Zoom Integration**, **Password**
 3. **Schedule**: **Time Zone**, **Select Rooms**, **Working hours** → **Save Profile**
 4. Other sections: **Save changes** as shown
-5. Configure **Zoom Integration** for virtual sessions
+5. For Zoom credentials and connection test, follow **Chapter 5 - Zoom Setup (Therapist)**
 6. Use **Password** to change password while signed in
 
 Emergency contact sits under **Basic Info** on the therapist self-profile.
 
 ---
 
-## 8.2 Clients and scheduling
+## 11.2 Clients and scheduling
 
 ### Clients
 
 1. **Clients** → `/therapist/clients`
 2. Open a row for the same profile tabs as Admin
-3. **Add Client** → **Add New Client** (Personal through Clinical; full field list in Chapter 4)
+3. **Add Client** → **Add New Client** (Personal through Clinical; full field list in Chapter 6)
 4. Optional **Enable Portal Access**; set **Assigned Therapist** (often yourself)
 5. **Create Client**; manage portal from **Overview → Portal Access Management**
 6. Header **Edit** / **Delete** (confirm)
@@ -67,11 +66,11 @@ Emergency contact sits under **Basic Info** on the therapist self-profile.
 
 ---
 
-## 8.3 Billings, tasks, notifications
+## 11.3 Billings, tasks, notifications
 
 ### Billings
 
-`/therapist/billings` uses the same invoice actions as Chapter 6 (Pay now, email, preview, download, discount, status), limited by your clients and permissions.
+`/therapist/billings` uses the same invoice actions as Chapter 9 (Pay now, email, preview, download, discount, status), limited by your clients and permissions.
 
 ### Tasks
 

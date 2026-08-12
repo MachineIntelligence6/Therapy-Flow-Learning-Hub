@@ -1,16 +1,15 @@
-# Chapter 5 - Scheduling & Sessions
+# Chapter 7 - Scheduling & Sessions
 
 **Slug:** `ch-05-scheduling-and-sessions`  
-**Audience:** Admin (Therapist scheduling is similar in Chapter 8)  
-**Order:** 5000
-
+**Audience:** Admin (Therapist scheduling is similar in Chapter 11)  
+**Order:** 7000
 Book sessions, import in bulk, use calendar views, and manage the session lifecycle from Scheduling and the Admin dashboard.
 
 **Primary path:** Sidebar → **Scheduling** → `/admin/scheduling`
 
 ---
 
-## 5.1 Book sessions (Admin)
+## 7.1 Book sessions (Admin)
 
 ### Schedule New Session
 
@@ -60,7 +59,7 @@ Also: **Cancel**, **Back**. Success messaging ends with **Done**.
 
 ---
 
-## 5.2 Session lifecycle and dashboard
+## 7.2 Session lifecycle and dashboard
 
 ### Session card ⋮ (status dependent)
 

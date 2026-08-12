@@ -1,10 +1,9 @@
-# Chapter 2 - Payments & Subscription (Admin)
+# Chapter 13 - Payments & Subscription (Admin)
 
 **Slug:** `ch-02-payments-and-subscription`  
 **Parent:** `ch-02-clinic-setup`  
 **Audience:** Admin  
-**Order:** 2100
-
+**Order:** 13000
 Sub-chapter of **Clinic Setup**. Two separate money flows:
 
 1. **Payment Integration** - clients pay your clinic invoices (Stripe Connect)
@@ -19,7 +18,7 @@ Open from the sidebar: **System → Payments & Subscription** (`/admin/payments-
 
 ---
 
-## Payment Integration (client invoice pay)
+## 13.1 Payment Integration (client invoice pay)
 
 Use this so clients can **Pay now** on portal invoices when the invoice is payable.
 
@@ -34,7 +33,7 @@ Until Stripe is connected for the clinic, online **Pay now** for clients will no
 
 ---
 
-## Subscription (clinic SmartHub plan)
+## 13.2 Subscription (clinic SmartHub plan)
 
 Use this for the organisation's own plan, trial status, invoices, and self-serve pay or checkout when offered.
 
