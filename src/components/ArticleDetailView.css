@@ -76,6 +76,7 @@
   width: 100%;
   justify-self: stretch;
   min-height: 48px;
+  height: 48px;
 }
 
 .lesson-nav-next {
@@ -130,16 +131,21 @@
   white-space: nowrap;
   width: 100%;
   min-height: 48px;
+  height: 48px;
+  /* Match the subtle elevation used across the app */
+  box-shadow: var(--shadow-sm);
 }
 
 .lesson-complete-btn:hover {
   border-color: var(--primary-800-p);
+  box-shadow: var(--shadow-sm);
 }
 
 .lesson-complete-btn.is-done {
   background: var(--primary-50-p);
   border-color: var(--primary-700-p);
   color: var(--primary-900-p);
+  box-shadow: var(--shadow-sm);
 }
 
 .course-status-chip {
